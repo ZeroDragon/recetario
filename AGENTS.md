@@ -12,6 +12,18 @@ Estas instrucciones aplican al crear o modificar archivos en `recipes/`.
 - No agregues `layout` ni `tags` al front matter. `recipes/recipes.11tydata.js` ya aplica `layout: receta.njk` y `tags: receta` a todo el directorio.
 - No agregues un `<h1>` al cuerpo: el layout lo genera a partir de `title`.
 
+## Economía
+
+- Las recetas nuevas deben ser baratas y pensadas para un presupuesto cotidiano en México.
+- Prioriza ingredientes económicos, rendidores y fáciles de encontrar: huevo, avena, arroz, frijoles, lentejas, tortillas, verduras de temporada, pollo y cortes magros de bajo costo.
+- Reutiliza ingredientes entre varias recetas para reducir desperdicio y evitar una lista de compras con demasiados productos distintos.
+- Prefiere productos de temporada, presentaciones a granel y alimentos básicos sobre ingredientes importados, especializados o de marca.
+- Limita ingredientes costosos como salmón, camarón, nueces, frutos rojos, cortes premium, suplementos y quesos caros. Úsalos sólo si el usuario los solicita o si incluyes una alternativa económica equivalente.
+- Cuando dos ingredientes cumplan la misma función nutricional y culinaria, elige el más barato. Por ejemplo, prefiere pollo, huevo, atún, sardina, frijoles o lentejas como fuentes habituales de proteína.
+- Diseña las cantidades para aprovechar envases y unidades completas cuando sea razonable, y explica cómo conservar o reutilizar sobrantes si los hubiera.
+- No abarates una receta reduciendo de forma importante la porción, la proteína, la fibra o la variedad de verduras. El costo debe optimizarse manteniendo una comida suficiente y nutricionalmente coherente.
+- Si el precio depende mucho de la región o la temporada, ofrece en la propia receta una sustitución económica breve y compatible con los macros.
+
 ## Front matter obligatorio
 
 Conserva este orden y estos nombres de campos:
