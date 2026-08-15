@@ -9,7 +9,6 @@
   },
   "devDependencies": {
     "@11ty/eleventy": "^3.0.0",
-    "jsdom": "^30.0.1",
     "markdown-it-task-lists": "^2.1.1"
   }
 }
