@@ -1,4 +1,4 @@
-// Global data: expone las recetas (slug, título, tipo, ingredientes) como
+// Global data: expone las recetas (slug, título, tipo, ingredientes, macros) como
 // JSON para que el JS del menú/lista las use sin fetch.
 import fs from "fs";
 import path from "path";
@@ -26,6 +26,7 @@ export default () => {
         title: data.title || slug,
         tipo,
         ingredientes: data.ingredientes || [],
+        macros_por_porcion: data.macros_por_porcion || null,
       });
     }
   }

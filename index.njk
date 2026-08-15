@@ -1,12 +1,43 @@
 ---
 layout: base.njk
 ---
+{% set TIPOS_LABEL = { desayuno: "Desayuno", postentreno: "Post-entreno", comida: "Comida", cena: "Cena" } %}
 <h1>Recetas</h1>
 <p class="subtitle">Todas las recetas, en un solo lugar.</p>
-<p class="recipe-count">{{ collections.receta.length }} {% if collections.receta.length == 1 %}receta{% else %}recetas{% endif %}</p>
+<p class="recipe-count" id="recipe-count">{{ recetas.recetas.length }} {% if recetas.recetas.length == 1 %}receta{% else %}recetas{% endif %}</p>
+
+<div class="filter-bar" role="group" aria-label="Filtrar recetas por tipo">
+  <button type="button" class="filter-pill" data-filtro="todos" aria-pressed="true">Todos</button>
+  <button type="button" class="filter-pill" data-filtro="desayuno" aria-pressed="false">Desayuno</button>
+  <button type="button" class="filter-pill" data-filtro="postentreno" aria-pressed="false">Post-entreno</button>
+  <button type="button" class="filter-pill" data-filtro="comida" aria-pressed="false">Comida</button>
+  <button type="button" class="filter-pill" data-filtro="cena" aria-pressed="false">Cena</button>
+</div>
 
 <ul class="recipe-list">
-{%- for receta in collections.receta | sort(false, false, "data.title") %}
-  <li><a href="{{ receta.url | url }}">{{ receta.data.title }}</a></li>
+{%- for r in recetas.recetas %}
+  <li class="recipe-item" data-tipo="{{ r.tipo | join(' ') }}">
+    <a href="{{ '/recipes/' | url }}{{ r.slug }}/">
+      <span class="recipe-main"><span class="recipe-title">{{ r.title }}</span></span>
+      <span class="recipe-meta">
+        <span class="recipe-tipos">
+        {%- for t in r.tipo %}
+          <span class="tipo-badge tipo-{{ t }}">{{ TIPOS_LABEL[t] or t }}</span>
+        {%- endfor %}
+        </span>
+        {%- if r.macros_por_porcion %}
+        <span class="recipe-macros">
+          <span class="macro-kcal">{{ r.macros_por_porcion.calorias_kcal }} kcal</span>
+          · P {{ r.macros_por_porcion.proteina_g }}
+          · C {{ r.macros_por_porcion.carbohidratos_g }}
+          · G {{ r.macros_por_porcion.grasas_g }}
+          {%- if r.macros_por_porcion.fibra_g %} · F {{ r.macros_por_porcion.fibra_g }}{% endif %}
+        </span>
+        {%- endif %}
+      </span>
+    </a>
+  </li>
 {%- endfor %}
 </ul>
+
+<script src="{{ '/js/recetas.js' | url }}"></script>

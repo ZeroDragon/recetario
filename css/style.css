@@ -161,9 +161,8 @@ h1 {
 
 .recipe-list a {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
+  flex-direction: column;
+  gap: 0.5rem;
   padding: 1rem 1.1rem; /* tap target cómodo en móvil */
   background: var(--surface);
   border: 1px solid var(--border);
@@ -173,11 +172,92 @@ h1 {
   transition: border-color 0.15s ease, background 0.15s ease;
 }
 
-.recipe-list a::after {
+.recipe-item[hidden] { display: none; }
+
+.recipe-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.recipe-main::after {
   content: "→";
   color: var(--accent);
   font-weight: 700;
   transition: transform 0.15s ease;
+}
+
+.recipe-title { font-weight: 600; }
+
+.recipe-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.recipe-tipos {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.tipo-badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.5;
+  padding: 0.12rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid currentColor;
+  white-space: nowrap;
+}
+
+.tipo-desayuno { color: var(--cyan); background: color-mix(in srgb, var(--cyan) 12%, transparent); }
+.tipo-postentreno { color: var(--green); background: color-mix(in srgb, var(--green) 12%, transparent); }
+.tipo-comida { color: var(--blue); background: color-mix(in srgb, var(--blue) 12%, transparent); }
+.tipo-cena { color: var(--accent-strong); background: color-mix(in srgb, var(--accent-strong) 12%, transparent); }
+
+.recipe-macros {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.recipe-macros .macro-kcal {
+  color: var(--green);
+  font-weight: 600;
+}
+
+/* Filtros por tipo (pills) */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: -0.75rem 0 1.5rem; /* recoge el margen del contador */
+}
+
+.filter-pill {
+  font-family: inherit;
+  font-size: 0.9rem;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+
+.filter-pill:hover { border-color: var(--accent); color: var(--text); }
+
+.filter-pill[aria-pressed="true"] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 600;
 }
 
 /* ---------- contenido de receta ---------- */
@@ -547,7 +627,7 @@ main table {
     background: var(--surface-2);
   }
 
-  .recipe-list a:hover::after { transform: translateX(3px); }
+  .recipe-list a:hover .recipe-main::after { transform: translateX(3px); }
 
   .contains-task-list li:hover {
     background: var(--surface);
