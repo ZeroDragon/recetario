@@ -18,25 +18,18 @@ macros_por_porcion:
   fibra_g: 8
 ---
 
-<table>
-  <tbody>
-    <tr>
-      <td><strong>80 g</strong><br />avena</td>
-      <td rowspan="5">licuar<br />reposar 5 min</td>
-      <td rowspan="5" colspan="2">verter porciones en sart&eacute;n<br />cocinar a fuego medio<br />voltear al formar burbujas</td>
-    </tr>
-    <tr><td><strong>1</strong><br />pl&aacute;tano</td></tr>
-    <tr><td><strong>2</strong><br />huevos</td></tr>
-    <tr><td><strong>200 mL</strong><br />leche deslactosada</td></tr>
-    <tr><td><strong>canela</strong><br />al gusto</td></tr>
-    <tr>
-      <td><strong>5 g</strong><br />aceite de oliva</td>
-      <td colspan="3">engrasar ligeramente el sart&eacute;n</td>
-    </tr>
-    <tr><td colspan="4" align="center"><strong>PARA SERVIR</strong></td></tr>
-    <tr>
-      <td><strong>2</strong><br />manzanas rebanadas</td>
-      <td colspan="3">dividir los hotcakes entre 2 platos<br />agregar una manzana a cada porci&oacute;n<br />servir</td>
-    </tr>
-  </tbody>
-</table>
+{% flujo %}
+[licuar] licuar · reposar 5 min
+[cocinar] verter porciones en sartén · cocinar a fuego medio · voltear al formar burbujas
+[engrasar] engrasar ligeramente el sartén
+[servir] dividir los hotcakes entre 2 platos · agregar una manzana a cada porción · servir
+
+5 g | aceite de oliva | [engrasar]
+80 g | avena | [licuar] → [cocinar]
+1 | plátano | [licuar] → [cocinar]
+2 | huevos | [licuar] → [cocinar]
+200 mL | leche deslactosada | [licuar] → [cocinar]
+al-gusto | canela | [licuar] → [cocinar]
+-- PARA SERVIR --
+2 | manzanas rebanadas | [servir]
+{% endflujo %}

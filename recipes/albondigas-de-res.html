@@ -23,67 +23,25 @@ macros_por_porcion:
   fibra_g: 9
 ---
 
-<table>
-  <tbody>
+{% flujo %}
+[formar] mezclar · formar albóndigas
+[sellar] sellar ligeramente en sartén · reservar
+[licuar] licuar
+[cocer_salsa] verter en olla · cocinar 8–10 min
+[cocer_albondigas] incorporar albóndigas · tapar · cocinar 15–20 min
+[servir] dividir entre 2 recipientes · agregar albóndigas y salsa · acompañar con verduras · refrigerar o congelar
 
-    <tr>
-      <td><strong>400 g</strong><br />carne molida magra</td>
-      <td rowspan="5">mezclar<br />formar alb&oacute;ndigas</td>
-      <td rowspan="5" colspan="2">sellar ligeramente en sart&eacute;n<br />reservar</td>
-    </tr>
-
-    <tr>
-      <td><strong>1</strong><br />huevo</td>
-    </tr>
-
-    <tr>
-      <td><strong>30 g</strong><br />avena molida</td>
-    </tr>
-
-    <tr>
-      <td><strong>1 diente</strong><br />ajo picado</td>
-    </tr>
-
-    <tr>
-      <td><strong>pimienta + comino</strong><br />al gusto</td>
-    </tr>
-
-    <tr>
-      <td><strong>400 g</strong><br />jitomate</td>
-      <td rowspan="4">licuar</td>
-      <td rowspan="5">verter en olla<br />cocinar 8&ndash;10 min</td>
-      <td rowspan="5">incorporar alb&oacute;ndigas<br />tapar<br />cocinar 15&ndash;20 min</td>
-    </tr>
-
-    <tr>
-      <td><strong>1</strong><br />chipotle adobado</td>
-    </tr>
-
-    <tr>
-      <td><strong>100 g</strong><br />cebolla</td>
-    </tr>
-
-    <tr>
-      <td><strong>1 diente</strong><br />ajo</td>
-    </tr>
-
-    <tr>
-      <td colspan="2"><strong>5 g</strong><br />aceite de oliva</td>
-    </tr>
-
-    <tr>
-      <td colspan="4" align="center"><strong>ACOMPA&Ntilde;AR</strong></td>
-    </tr>
-
-    <tr>
-      <td><strong>300 g</strong><br />arroz cocido</td>
-      <td rowspan="2" colspan="3">dividir entre 2 recipientes<br />agregar alb&oacute;ndigas y
-        salsa<br />acompa&ntilde;ar con verduras<br />refrigerar o congelar</td>
-    </tr>
-
-    <tr>
-      <td><strong>400 g</strong><br />calabacita, zanahoria o verduras mixtas</td>
-    </tr>
-
-  </tbody>
-</table>
+400 g | carne molida magra | [formar] → [sellar]
+1 | huevo | [formar] → [sellar]
+30 g | avena molida | [formar] → [sellar]
+1 diente | ajo picado | [formar] → [sellar]
+al-gusto | pimienta + comino | [formar] → [sellar]
+400 g | jitomate | [licuar] → [cocer_salsa] → [cocer_albondigas]
+1 | chipotle adobado | [licuar] → [cocer_salsa] → [cocer_albondigas]
+100 g | cebolla | [licuar] → [cocer_salsa] → [cocer_albondigas]
+1 diente | ajo | [licuar] → [cocer_salsa] → [cocer_albondigas]
+5 g | aceite de oliva | [cocer_salsa] → [cocer_albondigas]
+-- ACOMPAÑAR --
+300 g | arroz cocido | [servir]
+400 g | calabacita, zanahoria o verduras mixtas | [servir]
+{% endflujo %}

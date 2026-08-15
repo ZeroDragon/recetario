@@ -21,24 +21,18 @@ macros_por_porcion:
   fibra_g: 11
 ---
 
-<table>
-  <tbody>
-    <tr>
-      <td><strong>80 g</strong><br />cebolla picada</td>
-      <td rowspan="4">agregar a la olla</td>
-      <td rowspan="4">sofre&iacute;r 5 min</td>
-      <td rowspan="9">verter el caldo<br />hervir suavemente<br />cocinar 18&ndash;20 min</td>
-    </tr>
-    <tr><td><strong>150 g</strong><br />jitomate picado</td></tr>
-    <tr><td><strong>2 dientes</strong><br />ajo picado</td></tr>
-    <tr><td><strong>5 g</strong><br />aceite de oliva</td></tr>
-    <tr><td colspan="3"><strong>300 g</strong><br />pechuga de pollo en cubos</td></tr>
-    <tr><td colspan="3"><strong>240 g</strong><br />garbanzos cocidos</td></tr>
-    <tr><td colspan="3"><strong>200 g</strong><br />calabacita</td></tr>
-    <tr><td colspan="3"><strong>150 g</strong><br />zanahoria</td></tr>
-    <tr><td colspan="3"><strong>1 L + or&eacute;gano</strong><br />caldo de pollo y or&eacute;gano al gusto</td></tr>
-    <tr>
-      <td colspan="4" align="center"><strong>comprobar la cocci&oacute;n del pollo, dividir y servir</strong></td>
-    </tr>
-  </tbody>
-</table>
+{% flujo %}
+[sofreir] agregar a la olla · sofreír 5 min
+[cocer] verter el caldo · hervir suavemente · cocinar 18–20 min
+[servir] comprobar la cocción del pollo · dividir · servir
+
+80 g | cebolla picada | [sofreir] → [cocer]
+150 g | jitomate picado | [sofreir] → [cocer]
+2 dientes | ajo picado | [sofreir] → [cocer]
+5 g | aceite de oliva | [sofreir] → [cocer]
+300 g | pechuga de pollo en cubos | [cocer]
+240 g | garbanzos cocidos | [cocer]
+200 g | calabacita | [cocer]
+150 g | zanahoria | [cocer]
+1 L + orégano | caldo de pollo y orégano al gusto | [cocer] → [servir]
+{% endflujo %}

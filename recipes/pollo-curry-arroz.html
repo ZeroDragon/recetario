@@ -22,30 +22,23 @@ macros_por_porcion:
   fibra_g: 6
 ---
 
-<table>
-  <tbody>
-    <tr>
-      <td><strong>360 g</strong><br />pechuga de pollo en cubos</td>
-      <td rowspan="3">mezclar</td>
-      <td rowspan="3">sellar en sart&eacute;n<br />reservar</td>
-      <td rowspan="9">incorporar el pollo<br />cocinar 8&ndash;10 min<br />verter la mezcla de leche<br />cocinar hasta espesar</td>
-    </tr>
-    <tr><td><strong>curry + pimienta</strong><br />al gusto</td></tr>
-    <tr><td><strong>5 g</strong><br />aceite de oliva</td></tr>
-    <tr>
-      <td><strong>100 g</strong><br />cebolla picada</td>
-      <td rowspan="4">agregar al sart&eacute;n</td>
-      <td rowspan="4">saltear 6&ndash;8 min</td>
-    </tr>
-    <tr><td><strong>200 g</strong><br />calabacita</td></tr>
-    <tr><td><strong>150 g</strong><br />zanahoria</td></tr>
-    <tr><td><strong>2 dientes</strong><br />ajo picado</td></tr>
-    <tr><td colspan="3"><strong>200 mL</strong><br />leche deslactosada</td></tr>
-    <tr><td colspan="3"><strong>15 g</strong><br />harina de trigo</td></tr>
-    <tr><td colspan="4" align="center"><strong>ACOMPA&Ntilde;AR</strong></td></tr>
-    <tr>
-      <td><strong>260 g</strong><br />arroz cocido</td>
-      <td colspan="3">dividir entre 2 recipientes<br />agregar pollo al curry<br />refrigerar</td>
-    </tr>
-  </tbody>
-</table>
+{% flujo %}
+[mezclar] mezclar
+[sellar] sellar en sartén · reservar
+[saltear] agregar al sartén · saltear 6–8 min
+[cocer] incorporar el pollo · cocinar 8–10 min · verter la mezcla de leche · cocinar hasta espesar
+[servir] dividir entre 2 recipientes · agregar pollo al curry · refrigerar
+
+360 g | pechuga de pollo en cubos | [mezclar] → [sellar] → [cocer]
+al-gusto | curry + pimienta | [mezclar] → [sellar] → [cocer]
+5 g | aceite de oliva | [mezclar] → [sellar] → [cocer]
+-- PREPARAR SALSA --
+100 g | cebolla picada | [saltear] → [cocer]
+200 g | calabacita | [saltear] → [cocer]
+150 g | zanahoria | [saltear] → [cocer]
+2 dientes | ajo picado | [saltear] → [cocer]
+200 mL | leche deslactosada | [cocer]
+15 g | harina de trigo | [cocer]
+-- ACOMPAÑAR --
+260 g | arroz cocido | [servir]
+{% endflujo %}

@@ -20,28 +20,21 @@ macros_por_porcion:
   fibra_g: 9
 ---
 
-<table>
-  <tbody>
-    <tr>
-      <td><strong>500 g</strong><br />papa en cubos</td>
-      <td>hervir hasta suavizar</td>
-      <td colspan="2">escurrir<br />machacar<br />dejar templar</td>
-    </tr>
-    <tr>
-      <td><strong>3 latas</strong><br />at&uacute;n en agua, drenado</td>
-      <td rowspan="5">mezclar con la papa</td>
-      <td rowspan="5">formar tortitas</td>
-      <td rowspan="6">dorar por ambos lados<br />cocinar completamente el huevo</td>
-    </tr>
-    <tr><td><strong>2</strong><br />huevos</td></tr>
-    <tr><td><strong>40 g</strong><br />avena molida</td></tr>
-    <tr><td><strong>100 g</strong><br />cebolla picada</td></tr>
-    <tr><td><strong>paprika + pimienta</strong><br />al gusto</td></tr>
-    <tr><td colspan="3"><strong>10 g</strong><br />aceite de oliva</td></tr>
-    <tr><td colspan="4" align="center"><strong>ACOMPA&Ntilde;AR</strong></td></tr>
-    <tr>
-      <td><strong>300 g</strong><br />verduras mixtas</td>
-      <td colspan="3">cocinar al vapor<br />dividir con las tortitas entre 2 platos<br />servir</td>
-    </tr>
-  </tbody>
-</table>
+{% flujo %}
+[hervir] hervir hasta suavizar
+[machacar] escurrir · machacar · dejar templar
+[mezclar] mezclar con la papa
+[formar] formar tortitas
+[dorar] dorar por ambos lados · cocinar completamente el huevo
+[servir] cocinar al vapor · dividir con las tortitas entre 2 platos · servir
+
+500 g | papa en cubos | [hervir] → [machacar]
+3 latas | atún en agua, drenado | [mezclar] → [formar] → [dorar]
+2 | huevos | [mezclar] → [formar] → [dorar]
+40 g | avena molida | [mezclar] → [formar] → [dorar]
+100 g | cebolla picada | [mezclar] → [formar] → [dorar]
+al-gusto | paprika + pimienta | [mezclar] → [formar] → [dorar]
+10 g | aceite de oliva | [dorar]
+-- ACOMPAÑAR --
+300 g | verduras mixtas | [servir]
+{% endflujo %}

@@ -21,30 +21,24 @@ macros_por_porcion:
   fibra_g: 11
 ---
 
-<table>
-  <tbody>
-    <tr><td colspan="4" align="center"><strong>Precalentar horno a 200 &deg;C</strong></td></tr>
-    <tr>
-      <td><strong>6</strong><br />tortillas en tri&aacute;ngulos</td>
-      <td colspan="3">hornear 10&ndash;15 min<br />voltear a mitad de cocci&oacute;n<br />reservar</td>
-    </tr>
-    <tr>
-      <td><strong>300 g</strong><br />tomatillo</td>
-      <td rowspan="4">hervir 8 min<br />licuar</td>
-      <td rowspan="5">verter en sart&eacute;n<br />cocinar 5 min</td>
-      <td rowspan="7">incorporar totopos y pollo<br />mezclar brevemente<br />dividir entre 2 platos</td>
-    </tr>
-    <tr><td><strong>1</strong><br />chile serrano</td></tr>
-    <tr><td><strong>40 g</strong><br />cebolla</td></tr>
-    <tr><td><strong>1 diente</strong><br />ajo</td></tr>
-    <tr><td colspan="2"><strong>5 g</strong><br />aceite de oliva</td></tr>
-    <tr><td colspan="3"><strong>160 g</strong><br />pollo cocido y deshebrado</td></tr>
-    <tr><td colspan="3"><strong>cilantro</strong><br />al gusto</td></tr>
-    <tr><td colspan="4" align="center"><strong>TERMINAR</strong></td></tr>
-    <tr>
-      <td><strong>2</strong><br />huevos</td>
-      <td rowspan="2" colspan="3">calentar los frijoles y cocinar los huevos al gusto<br />agregar la mitad a cada plato<br />servir</td>
-    </tr>
-    <tr><td><strong>160 g</strong><br />frijoles cocidos</td></tr>
-  </tbody>
-</table>
+{% flujo %}
+[hornear] hornear 10–15 min · voltear a mitad de cocción · reservar
+[licuar] hervir 8 min · licuar
+[cocer_salsa] verter en sartén · cocinar 5 min
+[mezclar] incorporar totopos y pollo · mezclar brevemente · dividir entre 2 platos
+[terminar] calentar los frijoles y cocinar los huevos al gusto · agregar la mitad a cada plato · servir
+
+-- PRECALENTAR HORNO A 200 °C --
+6 | tortillas en triángulos | [hornear]
+-- PREPARAR SALSA Y CHILAQUILES --
+300 g | tomatillo | [licuar] → [cocer_salsa] → [mezclar]
+1 | chile serrano | [licuar] → [cocer_salsa] → [mezclar]
+40 g | cebolla | [licuar] → [cocer_salsa] → [mezclar]
+1 diente | ajo | [licuar] → [cocer_salsa] → [mezclar]
+5 g | aceite de oliva | [cocer_salsa] → [mezclar]
+160 g | pollo cocido y deshebrado | [mezclar]
+al-gusto | cilantro | [mezclar]
+-- TERMINAR --
+2 | huevos | [terminar]
+160 g | frijoles cocidos | [terminar]
+{% endflujo %}

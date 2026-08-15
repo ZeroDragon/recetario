@@ -16,18 +16,13 @@ macros_por_porcion:
   fibra_g: 9
 ---
 
-<table>
-  <tbody>
-    <tr>
-      <td><strong>300 mL</strong><br />leche descremada</td>
-      <td rowspan="3" colspan="3">colocar en una olla<br />cocinar a fuego bajo 5&ndash;7 min<br />mover hasta espesar</td>
-    </tr>
-    <tr><td><strong>50 g</strong><br />avena</td></tr>
-    <tr><td><strong>canela</strong><br />al gusto</td></tr>
-    <tr>
-      <td><strong>1</strong><br />pl&aacute;tano rebanado</td>
-      <td rowspan="2" colspan="3">agregar sobre la avena<br />servir caliente o fr&iacute;a</td>
-    </tr>
-    <tr><td><strong>15 g</strong><br />cacahuate natural picado</td></tr>
-  </tbody>
-</table>
+{% flujo %}
+[cocinar] colocar en una olla · cocinar a fuego bajo 5–7 min · mover hasta espesar
+[servir] agregar sobre la avena · servir caliente o fría
+
+300 mL | leche descremada | [cocinar]
+50 g | avena | [cocinar]
+al-gusto | canela | [cocinar]
+1 | plátano rebanado | [servir]
+15 g | cacahuate natural picado | [servir]
+{% endflujo %}

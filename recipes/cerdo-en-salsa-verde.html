@@ -21,60 +21,28 @@ macros_por_porcion:
   grasas_g: 20
   fibra_g: 12
 ---
-<table>
-  <tbody>
+{% flujo %}
+[mezclar] mezclar
+[sellar] sellar a fuego medio-alto
+[reservar] reservar
+[licuar] hervir o asar · licuar
+[cocer_salsa] verter en olla · cocinar 8–10 min
+[cocer_cerdo] incorporar a la salsa · cocinar tapado 15–20 min
+[incorporar] incorporar
+[servir] dividir entre 2 porciones · agregar cerdo con salsa · acompañar con frijoles · servir o almacenar
 
-    <tr>
-      <td><strong>400 g</strong><br />lomo de cerdo en cubos</td>
-      <td rowspan="3">mezclar</td>
-      <td rowspan="3">sellar a fuego medio-alto<br />reservar</td>
-      <td rowspan="8">incorporar a la salsa<br />cocinar tapado 15&ndash;20 min</td>
-    </tr>
-
-    <tr>
-      <td><strong>5 g</strong><br />aceite de oliva</td>
-    </tr>
-
-    <tr>
-      <td><strong>pimienta + comino</strong><br />al gusto</td>
-    </tr>
-
-    <tr>
-      <td><strong>400 g</strong><br />tomatillo</td>
-      <td rowspan="4">hervir o asar<br />licuar</td>
-      <td rowspan="5">verter en olla<br />cocinar 8&ndash;10 min</td>
-    </tr>
-
-    <tr>
-      <td><strong>1&ndash;2</strong><br />chiles serranos</td>
-    </tr>
-
-    <tr>
-      <td><strong>80 g</strong><br />cebolla</td>
-    </tr>
-
-    <tr>
-      <td><strong>2 dientes</strong><br />ajo</td>
-    </tr>
-
-    <tr>
-      <td><strong>300 g</strong><br />nopales cocidos</td>
-      <td>incorporar</td>
-    </tr>
-
-    <tr>
-      <td colspan="4" align="center"><strong>ACOMPA&Ntilde;AR</strong></td>
-    </tr>
-
-    <tr>
-      <td><strong>300 g</strong><br />arroz cocido</td>
-      <td rowspan="2" colspan="3">dividir entre 2 porciones<br />agregar cerdo con salsa<br />acompa&ntilde;ar con
-        frijoles<br />servir o almacenar</td>
-    </tr>
-
-    <tr>
-      <td><strong>160 g</strong><br />frijoles cocidos</td>
-    </tr>
-
-  </tbody>
-</table>
+-- PRECOCCIÓN --
+400 g | lomo de cerdo en cubos | [mezclar] → [sellar] → [reservar]
+5 g | aceite de oliva | [mezclar] → [sellar] → [reservar]
+al-gusto | pimienta + comino | [mezclar] → [sellar] → [reservar]
+-- PREPARAR SALSA --
+400 g | tomatillo | [licuar] → [cocer_salsa] → [cocer_cerdo]
+1–2 | chiles serranos | [licuar] → [cocer_salsa] → [cocer_cerdo]
+80 g | cebolla | [licuar] → [cocer_salsa] → [cocer_cerdo]
+2 dientes | ajo | [licuar] → [cocer_salsa] → [cocer_cerdo]
+300 g | nopales cocidos | [incorporar] → [cocer_salsa] → [cocer_cerdo]
+Cerdo reservado | preparación anterior | [incorporar] → [cocer_salsa] → [cocer_cerdo]
+-- ACOMPAÑAR --
+300 g | arroz cocido | [servir]
+160 g | frijoles cocidos | [servir]
+{% endflujo %}

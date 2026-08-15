@@ -20,54 +20,20 @@ macros_por_porcion:
   fibra_g: 9
 ---
 
-<table>
-  <tbody>
+{% flujo %}
+[batir] mezclar · batir ligeramente
+[sofreir] sofreír 2–3 min
+[cocinar] incorporar al sartén · cocinar revolviendo suavemente · retirar al alcanzar el punto deseado
+[servir] calentar · dividir entre 2 platos · agregar huevos · acompañar con tortillas y salsa · servir
 
-    <tr>
-      <td><strong>4</strong><br />huevos</td>
-      <td rowspan="4">mezclar<br />batir ligeramente</td>
-      <td rowspan="6" colspan="2">incorporar al sart&eacute;n<br />cocinar revolviendo suavemente<br />retirar al
-        alcanzar el punto deseado</td>
-    </tr>
-
-    <tr>
-      <td><strong>200 g</strong><br />claras de huevo</td>
-    </tr>
-
-    <tr>
-      <td><strong>120 g</strong><br />jam&oacute;n de pavo, picado</td>
-    </tr>
-
-    <tr>
-      <td><strong>pimienta</strong><br />al gusto</td>
-    </tr>
-
-    <tr>
-      <td><strong>80 g</strong><br />cebolla picada</td>
-      <td rowspan="2">sofre&iacute;r 2&ndash;3 min</td>
-    </tr>
-
-    <tr>
-      <td><strong>5 g</strong><br />aceite de oliva</td>
-    </tr>
-
-    <tr>
-      <td colspan="4" align="center"><strong>ACOMPA&Ntilde;AR</strong></td>
-    </tr>
-
-    <tr>
-      <td><strong>200 g</strong><br />frijoles cocidos</td>
-      <td rowspan="3" colspan="3">calentar<br />dividir entre 2 platos<br />agregar huevos<br />acompa&ntilde;ar con
-        tortillas y salsa<br />servir</td>
-    </tr>
-
-    <tr>
-      <td><strong>4</strong><br />tortillas de ma&iacute;z</td>
-    </tr>
-
-    <tr>
-      <td><strong>salsa</strong><br />al gusto</td>
-    </tr>
-
-  </tbody>
-</table>
+4 | huevos | [batir] → [cocinar]
+200 g | claras de huevo | [batir] → [cocinar]
+120 g | jamón de pavo, picado | [batir] → [cocinar]
+al-gusto | pimienta | [batir] → [cocinar]
+80 g | cebolla picada | [sofreir] → [cocinar]
+5 g | aceite de oliva | [sofreir] → [cocinar]
+-- ACOMPAÑAR --
+200 g | frijoles cocidos | [servir]
+4 | tortillas de maíz | [servir]
+al-gusto | salsa | [servir]
+{% endflujo %}

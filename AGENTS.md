@@ -56,53 +56,56 @@ macros_por_porcion:
 - `porciones_receta` es el rendimiento total de las cantidades indicadas.
 - Los cinco valores de `macros_por_porcion` son números por una sola porción, no por la receta completa. Usa valores enteros coherentes con ingredientes y rendimiento; no inventes precisión ni copies macros de otra receta. Si no hay datos suficientes para estimarlos con fundamento, pide esos datos antes de finalizar la receta.
 
-## Cuerpo HTML
+## Cuerpo con el shortcode `flujo`
 
-El cuerpo es HTML puro y representa ingredientes y acciones como un diagrama de flujo dentro de una tabla, no como párrafos, listas o una receta narrativa.
+El cuerpo usa el shortcode pareado `flujo` / `endflujo` para describir ingredientes y acciones. No escribas la tabla HTML a mano: el shortcode genera y valida el diagrama de flujo de cuatro columnas durante el build.
 
-```html
-<table>
-  <tbody>
+{% raw %}
+```njk
+{% flujo %}
+[mezclar] mezclar · marinar 15–20 min
+[cocinar] cocinar · reposar · rebanar
+[servir] calentar · repartir entre las porciones · servir
 
-    <tr>
-      <td><strong>400 g</strong><br />ingrediente principal</td>
-      <td rowspan="3">mezclar<br />marinar 15&ndash;20 min</td>
-      <td rowspan="3" colspan="2">cocinar<br />reposar<br />rebanar</td>
-    </tr>
-    <tr>
-      <td><strong>20 mL</strong><br />jugo de lim&oacute;n</td>
-    </tr>
-    <tr>
-      <td><strong>especias</strong><br />al gusto</td>
-    </tr>
-
-    <tr>
-      <td colspan="4" align="center"><strong>PARA SERVIR</strong></td>
-    </tr>
-    <tr>
-      <td><strong>4</strong><br />tortillas de ma&iacute;z</td>
-      <td colspan="3">calentar<br />repartir entre las porciones<br />servir</td>
-    </tr>
-
-  </tbody>
-</table>
+400 g | ingrediente principal | [mezclar] → [cocinar]
+20 mL | jugo de limón | [mezclar] → [cocinar]
+al-gusto | especias | [mezclar] → [cocinar]
+-- PARA SERVIR --
+4 | tortillas de maíz | [servir]
+{% endflujo %}
 ```
+{% endraw %}
 
-- Diseña una cuadrícula lógica de cuatro columnas. La primera columna suele contener cantidad y nombre; las siguientes muestran acciones en orden de izquierda a derecha.
-- Agrupa varios ingredientes que reciben la misma acción haciendo que la celda de acción use el `rowspan` correspondiente. Usa `colspan` para que una etapa ocupe las columnas restantes.
-- Comprueba cada bloque: la suma de celdas, `rowspan` y `colspan` debe cubrir exactamente cuatro columnas por fila. No copies valores de otra receta sin recalcularlos.
-- En cada ingrediente visible, coloca la cantidad o descriptor en `<strong>` y el nombre después de `<br />`.
-- Escribe instrucciones breves, en minúsculas y con verbos en infinitivo: `mezclar`, `cocinar`, `reposar`, `servir`. Separa acciones con `<br />`; no uses oraciones largas ni numeración.
-- Usa encabezados centrados que ocupen las cuatro columnas para cambios claros de fase: `ACOMPAÑAR`, `GUARNICIONES`, `PARA SERVIR`, precalentado o preparación por días.
-- Indica temperaturas, tiempos, reposo, refrigeración y conservación cuando afecten el resultado o la seguridad.
-- El cuerpo puede mostrar una cantidad como intervalo o aproximación si ayuda al cocinar (`350&ndash;400 g`, `&asymp;80 g`), aunque el front matter debe conservar una cantidad única que la lista de compras pueda sumar.
-- Conserva el estilo de los archivos existentes: Unicode en el YAML y entidades HTML para acentos y símbolos dentro del cuerpo (`&aacute;`, `&ntilde;`, `&deg;`, `&ndash;`, `&asymp;`). Usa `<br />` de forma consistente en contenido nuevo.
-- No añadas clases, estilos inline, scripts, imágenes ni estructura exterior a la tabla salvo que el usuario lo pida y el diseño global se actualice también.
+### Acciones o etapas
+
+- Define cada acción una sola vez con `[id] texto de la acción`, antes de la primera fila que la use.
+- El ID sólo puede contener letras ASCII, números y guion bajo. Usa nombres breves y descriptivos, sin espacios, acentos ni guiones: `[licuar]`, `[cocinar2]`, `[para_servir]`.
+- Si dos acciones necesitan textos distintos, usa IDs distintos aunque comiencen con el mismo verbo, por ejemplo `[mezclar]` y `[mezclar2]`.
+- Dentro del texto de una acción, separa los pasos con ` · `; cada punto medio se renderiza como un salto de línea. No escribas `<br />`.
+- Escribe instrucciones breves, en minúsculas y con verbos en infinitivo: `mezclar`, `cocinar`, `reposar`, `servir`. Incluye temperaturas, tiempos, reposo, refrigeración y conservación cuando afecten el resultado o la seguridad.
+- Se aceptan acciones literales directamente en una fila, pero prefiere acciones con ID para reutilizar texto y permitir que el shortcode agrupe celdas iguales.
+
+### Filas de ingredientes
+
+- Escribe cada fila como `cantidad | nombre | [accion1] → [accion2]`, con las acciones en orden temporal de izquierda a derecha.
+- Cada ingrediente debe tener al menos una acción y puede recorrer como máximo tres, porque la primera columna se reserva para el ingrediente y el flujo tiene tres columnas de procesos.
+- La fase completa también debe caber en esas tres columnas de procesos. Varias rutas con acciones distintas pueden requerir más columnas aunque ninguna fila tenga más de tres acciones; si el build reporta este caso, divide el proceso con un encabezado de fase apropiado.
+- Los ingredientes que pasan por exactamente las mismas acciones deben repetir la misma secuencia de IDs. El shortcode fusiona automáticamente las acciones idénticas de filas consecutivas.
+- La cantidad o descriptor destacado y el nombre ocupan campos separados. Usa, por ejemplo, `400 g | jitomate | [licuar]`, no `400 g jitomate | [licuar]`.
+- Para preparaciones intermedias puedes usar un descriptor en el primer campo: `arroz crispy | preparación anterior | [servir]`. Si no necesitas cantidad ni descriptor destacado, también se acepta `nombre | [accion]`.
+- El cuerpo puede mostrar cantidades como intervalos o aproximaciones (`350–400 g`, `≈80 g`) cuando ayuden al cocinar, aunque el front matter debe conservar una cantidad única que la lista de compras pueda sumar.
+
+### Encabezados y escritura
+
+- Usa `-- TEXTO --` para crear un encabezado de fase que ocupe las cuatro columnas: `-- ACOMPAÑAR --`, `-- PARA SERVIR --` o `-- DÍA 2 — Precalentar horno a 220 °C --`.
+- Un encabezado inicia una fase nueva. Colócalo inmediatamente antes de los ingredientes correspondientes; también puede aparecer solo para comunicar una instrucción de fase.
+- Usa líneas en blanco para legibilidad. Las líneas cuyo primer carácter visible es `#` son comentarios y no se renderizan.
+- Escribe Unicode normal en todo el cuerpo (`á`, `ñ`, `°`, `–`, `≈`). El shortcode escapa el contenido y genera el HTML; no uses entidades HTML, etiquetas, clases, estilos, scripts ni imágenes dentro de `flujo`.
 
 ## Coherencia y validación
 
-- Verifica que todos los ingredientes necesarios aparezcan tanto en `ingredientes` como en la tabla. Un ingrediente que sólo aparece en la tabla no llegará a la lista de compras.
-- Permite diferencias deliberadas de redacción entre ambos lugares: el front matter debe ser normalizable (`2 u diente ajo`), mientras la tabla debe ser fácil de leer (`<strong>2 dientes</strong><br />ajo picado`).
+- Verifica que todos los ingredientes necesarios aparezcan tanto en `ingredientes` como en las filas de `flujo`. Un ingrediente que sólo aparece en el cuerpo no llegará a la lista de compras.
+- Permite diferencias deliberadas de redacción entre ambos lugares: el front matter debe ser normalizable (`2 u diente ajo`), mientras el flujo debe ser fácil de leer (`2 dientes | ajo picado | [licuar]`).
 - Revisa que cantidades, porciones, tipo y macros no se contradigan entre sí.
 - Respeta la ortografía española. Corrige errores evidentes en contenido nuevo; no reproduzcas erratas o diferencias accidentales de archivos antiguos.
 - Ejecuta `npm run build` después de crear o modificar recetas. El trabajo no está terminado si Eleventy reporta errores.
@@ -110,4 +113,4 @@ El cuerpo es HTML puro y representa ingredientes y acciones como un diagrama de 
 
 ## Criterio de terminado
 
-Una receta nueva está lista cuando tiene slug correcto, front matter completo, ingredientes compatibles con la lista de compras, tabla de cuatro columnas estructuralmente válida, instrucciones culinarias suficientes, macros por porción coherentes y un build exitoso.
+Una receta nueva está lista cuando tiene slug correcto, front matter completo, ingredientes compatibles con la lista de compras, un bloque `flujo` válido, instrucciones culinarias suficientes, macros por porción coherentes y un build exitoso.

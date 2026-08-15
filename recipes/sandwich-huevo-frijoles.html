@@ -18,21 +18,15 @@ macros_por_porcion:
   fibra_g: 8
 ---
 
-<table>
-  <tbody>
-    <tr>
-      <td><strong>4</strong><br />huevos</td>
-      <td rowspan="4">agregar al sart&eacute;n</td>
-      <td rowspan="4" colspan="2">cocinar revolviendo<br />retirar al alcanzar el punto deseado</td>
-    </tr>
-    <tr><td><strong>100 g</strong><br />jitomate picado</td></tr>
-    <tr><td><strong>40 g</strong><br />cebolla picada</td></tr>
-    <tr><td><strong>5 g + pimienta</strong><br />aceite de oliva y pimienta al gusto</td></tr>
-    <tr><td colspan="4" align="center"><strong>ARMAR</strong></td></tr>
-    <tr>
-      <td><strong>4 rebanadas</strong><br />pan integral</td>
-      <td rowspan="2" colspan="3">tostar el pan<br />untar frijoles<br />repartir el huevo<br />formar 2 s&aacute;ndwiches</td>
-    </tr>
-    <tr><td><strong>100 g</strong><br />frijoles cocidos</td></tr>
-  </tbody>
-</table>
+{% flujo %}
+[cocinar] agregar al sartén · cocinar revolviendo · retirar al alcanzar el punto deseado
+[armar] tostar el pan · untar frijoles · repartir el huevo · formar 2 sándwiches
+
+4 | huevos | [cocinar]
+100 g | jitomate picado | [cocinar]
+40 g | cebolla picada | [cocinar]
+5 g + pimienta | aceite de oliva y pimienta al gusto | [cocinar]
+-- ARMAR --
+4 rebanadas | pan integral | [armar]
+100 g | frijoles cocidos | [armar]
+{% endflujo %}

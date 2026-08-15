@@ -20,38 +20,25 @@ macros_por_porcion:
   fibra_g: 11
 ---
 
-<table>
-  <tbody>
-    <tr>
-      <td colspan="4" align="center"><strong>PREPARAR PICO DE GALLO</strong></td>
-    </tr>
-    <tr>
-      <td><strong>50 g</strong><br />jitomate picado</td>
-      <td rowspan="3" colspan="2">mezclar</td>
-      <td rowspan="3">reservar</td>
-    </tr>
-    <tr><td><strong>50 g</strong><br />cebolla picada</td></tr>
-    <tr><td><strong>50 g</strong><br />chile picado</td></tr>
-    <tr>
-      <td colspan="4" align="center"><strong>PREPARAR HUEVOS</strong></td>
-    </tr>
-    <tr>
-      <td><strong>4</strong><br />huevos</td>
-      <td rowspan="2">cocinar al gusto</td>
-      <td rowspan="2">dividir en 4 porciones</td>
-    </tr>
-    <tr><td><strong>5 g</strong><br />aceite de oliva</td></tr>
-    <tr>
-      <td><strong>pimienta</strong><br />al gusto</td>
-      <td colspan="3">sazonar</td>
-    </tr>
-    <tr><td colspan="4" align="center"><strong>ARMAR</strong></td></tr>
-    <tr>
-      <td><strong>4</strong><br />tortillas de ma&iacute;z</td>
-      <td rowspan="4" colspan="3">dorar sin aceite<br />untar frijoles<br />agregar huevo, aguacate y pico de gallo<br />repartir entre 2 platos<br />servir</td>
-    </tr>
-    <tr><td><strong>160 g</strong><br />frijoles cocidos</td></tr>
-    <tr><td><strong>80 g</strong><br />aguacate</td></tr>
-    <tr><td><strong>pico de gallo</strong><br />preparaci&oacute;n anterior</td></tr>
-  </tbody>
-</table>
+{% flujo %}
+[mezclar] mezclar
+[reservar] reservar
+[cocinar] cocinar al gusto
+[dividir] dividir en 4 porciones
+[sazonar] sazonar
+[armar] dorar sin aceite · untar frijoles · agregar huevo, aguacate y pico de gallo · repartir entre 2 platos · servir
+
+-- PREPARAR PICO DE GALLO --
+50 g | jitomate picado | [mezclar] → [reservar]
+50 g | cebolla picada | [mezclar] → [reservar]
+50 g | chile picado | [mezclar] → [reservar]
+-- PREPARAR HUEVOS --
+4 | huevos | [cocinar] → [dividir]
+5 g | aceite de oliva | [cocinar] → [dividir]
+al-gusto | pimienta | [sazonar]
+-- ARMAR --
+4 | tortillas de maíz | [armar]
+160 g | frijoles cocidos | [armar]
+80 g | aguacate | [armar]
+pico de gallo | preparación anterior | [armar]
+{% endflujo %}

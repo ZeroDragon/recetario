@@ -22,63 +22,28 @@ macros_por_porcion:
   fibra_g: 8
 ---
 
-<table>
-  <tbody>
-    <tr>
-      <td colspan="4" align="center"><strong>D&Iacute;A 1 &mdash; Preparar el arroz y refrigerar completamente</strong>
-      </td>
-    </tr>
-    <tr>
-      <td><strong>150 g</strong><br />arroz crudo</td>
-      <td rowspan="2" colspan="3">cocer<br>extender en charola<br>enfriar r&aacute;pidamente<br>refrigerar hasta el
-        d&iacute;a siguiente</td>
-    </tr>
-    <tr>
-      <td><strong>agua</strong><br />seg&uacute;n m&eacute;todo de cocci&oacute;n</td>
-    </tr>
-    <tr>
-      <td colspan="4" align="center"><strong>D&Iacute;A 2 &mdash; Precalentar horno a 220 &deg;C</strong></td>
-    </tr>
-    <tr>
-      <td><strong>&asymp;400 g</strong><br />arroz cocido fr&iacute;o</td>
-      <td rowspan="3" colspan="3">mezclar<br>extender en una capa sobre charola<br>hornear hasta dorado y
-        crujiente<br>remover a mitad de cocci&oacute;n<br>dejar enfriar</td>
-    </tr>
-    <tr>
-      <td><strong>20 g</strong><br />aceite de oliva</td>
-    </tr>
-    <tr>
-      <td><strong>30 mL</strong><br />salsa de soya</td>
-    </tr>
-    <tr>
-      <td colspan="5" align="center"><strong>ENSALADA &mdash; Montar justo antes de consumir</strong></td>
-    </tr>
-    <tr>
-      <td><strong>3 latas</strong><br />at&uacute;n en agua, drenado</td>
-      <td rowspan="4">mezclar</td>
-      <td rowspan="7">incorporar</td>
-      <td rowspan="8">mezclar suavemente<br>servir inmediatamente</td>
-    </tr>
-    <tr>
-      <td><strong>1</strong><br />pepino, picado</td>
-    </tr>
-    <tr>
-      <td><strong>2</strong><br />zanahorias, ralladas</td>
-    </tr>
-    <tr>
-      <td><strong>ceboll&iacute;n</strong><br />al gusto</td>
-    </tr>
-    <tr>
-      <td colspan="2"><strong>1</strong><br />aguacate, en cubos</td>
-    </tr>
-    <tr>
-      <td colspan="2"><strong>20 g</strong><br />semillas de s&eacute;samo</td>
-    </tr>
-    <tr>
-      <td  colspan="2"><strong>&asymp;80 g</strong><br />aderezo light</td>
-    </tr>
-    <tr>
-      <td colspan="3"><strong>arroz crispy</strong><br />preparaci&oacute;n anterior</td>
-    </tr>
-  </tbody>
-</table>
+{% flujo %}
+[cocer] cocer · extender en charola · enfriar rápidamente · refrigerar hasta el día siguiente
+[mezclar] mezclar
+[hornear] extender en una capa sobre charola · hornear hasta dorado y crujiente · remover a mitad de cocción · dejar enfriar
+[mezclar2] mezclar
+[incorporar] incorporar
+[servir] mezclar suavemente · servir inmediatamente
+
+-- DÍA 1 — Preparar el arroz y refrigerar completamente --
+150 g | arroz crudo | [cocer]
+agua | según método de cocción | [cocer]
+-- DÍA 2 — Precalentar horno a 220 °C --
+≈400 g | arroz cocido frío | [mezclar] → [hornear]
+20 g | aceite de oliva | [mezclar] → [hornear]
+30 mL | salsa de soya | [mezclar] → [hornear]
+-- ENSALADA — Montar justo antes de consumir --
+3 latas | atún en agua, drenado | [mezclar2] → [incorporar] → [servir]
+1 | pepino, picado | [mezclar2] → [incorporar] → [servir]
+2 | zanahorias, ralladas | [mezclar2] → [incorporar] → [servir]
+al-gusto | cebollín | [mezclar2] → [incorporar] → [servir]
+1 | aguacate, en cubos | [incorporar] → [servir]
+20 g | semillas de sésamo | [incorporar] → [servir]
+≈80 g | aderezo light | [incorporar] → [servir]
+arroz crispy | preparación anterior | [servir]
+{% endflujo %}

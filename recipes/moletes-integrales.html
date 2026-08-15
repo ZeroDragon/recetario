@@ -19,59 +19,24 @@ macros_por_porcion:
   fibra_g: 10
 ---
 
-<table>
-  <tbody>
+{% flujo %}
+[mezclar] mezclar
+[reservar] reservar
+[armar] partir por la mitad · untar frijoles · agregar queso
+[gratinar] hornear o gratinar hasta que el queso se derrita
+[cocinar_huevo] cocinar al gusto
+[colocar_huevo] colocar sobre los molletes o servir al lado
+[servir] agregar al servir
 
-    <tr>
-      <td colspan="4" align="center"><strong>PREPARAR PICO DE GALLO</strong></td>
-    </tr>
-
-    <tr>
-      <td><strong>65 g</strong><br />jitomate picado</td>
-      <td rowspan="3" colspan="2">mezclar</td>
-      <td rowspan="3">reservar</td>
-    </tr>
-
-    <tr>
-      <td><strong>65 g</strong><br />cebolla picada</td>
-    </tr>
-
-    <tr>
-      <td><strong>65 g</strong><br />chile picado</td>
-    </tr>
-
-    <tr>
-      <td colspan="4" align="center"><strong>PREPARAR MOLLETES</strong></td>
-    </tr>
-
-    <tr>
-      <td><strong>2</strong><br />bolillos integrales medianos</td>
-      <td rowspan="3">partir por la mitad<br />untar frijoles<br />agregar queso</td>
-      <td rowspan="3" colspan="2">hornear o gratinar hasta que el queso se derrita</td>
-    </tr>
-
-    <tr>
-      <td><strong>240 g</strong><br />frijoles refritos bajos en grasa</td>
-    </tr>
-
-    <tr>
-      <td><strong>100 g</strong><br />queso Oaxaca o manchego reducido en grasa</td>
-    </tr>
-
-    <tr>
-      <td><strong>4</strong><br />huevos</td>
-      <td rowspan="2">cocinar al gusto</td>
-      <td rowspan="2" colspan="2">colocar sobre los molletes o servir al lado</td>
-    </tr>
-
-    <tr>
-      <td><strong>5 g</strong><br />aceite de oliva</td>
-    </tr>
-
-    <tr>
-      <td><strong>pico de gallo</strong><br />preparaci&oacute;n anterior</td>
-      <td colspan="3">agregar al servir</td>
-    </tr>
-
-  </tbody>
-</table>
+-- PREPARAR PICO DE GALLO --
+65 g | jitomate picado | [mezclar] → [reservar]
+65 g | cebolla picada | [mezclar] → [reservar]
+65 g | chile picado | [mezclar] → [reservar]
+-- PREPARAR MOLLETES --
+2 | bolillos integrales medianos | [armar] → [gratinar]
+240 g | frijoles refritos bajos en grasa | [armar] → [gratinar]
+100 g | queso Oaxaca o manchego reducido en grasa | [armar] → [gratinar]
+4 | huevos | [cocinar_huevo] → [colocar_huevo]
+5 g | aceite de oliva | [cocinar_huevo] → [colocar_huevo]
+pico de gallo | preparación anterior | [servir]
+{% endflujo %}
