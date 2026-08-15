@@ -5,11 +5,12 @@ export default function (eleventyConfig) {
   // Markdown: activar task lists ([ ] / [x]) para la lista de compras
   eleventyConfig.setLibrary(
     "md",
-    markdownIt({ html: true, linkify: true, typographer: true }).use(taskLists)
+    markdownIt({ html: true, linkify: true, typographer: true }).use(taskLists, { enabled: true })
   );
 
   // CSS estático se copia tal cual al output
   eleventyConfig.addPassthroughCopy("css");
+  eleventyConfig.addPassthroughCopy("js");
 
   // Archivos de proyecto que no deben convertirse en páginas
   ["README.md", "package.json", "package-lock.json", ".gitignore",

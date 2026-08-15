@@ -9,6 +9,8 @@ Ingredientes para surtir el menú semanal para 2 personas.
 Las cantidades incluyen un pequeño margen cuando resulta práctico comprar
 paquetes completos.
 
+<button id="reset-lista" type="button">Desmarcar todo</button>
+
 ## Proteínas
 
 - [ ] Pechuga de pollo (3.6–4 kg)
