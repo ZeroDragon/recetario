@@ -60,7 +60,9 @@ function sembrarMenuInicial() {
     if (!localStorage.getItem(STORAGE_ACTIVO)) {
       guardarActivo(MENU_INICIAL.id);
     }
+    return true; // se sembró (y hay que recargar activo)
   }
+  return false;
 }
 
 function guardarMenus(menus) {
@@ -68,11 +70,16 @@ function guardarMenus(menus) {
 }
 
 function cargarActivo() {
-  return localStorage.getItem(STORAGE_ACTIVO) || null;
+  const v = localStorage.getItem(STORAGE_ACTIVO);
+  return v && v !== "null" ? v : null;
 }
 
 function guardarActivo(id) {
-  localStorage.setItem(STORAGE_ACTIVO, id);
+  if (id) {
+    localStorage.setItem(STORAGE_ACTIVO, id);
+  } else {
+    localStorage.removeItem(STORAGE_ACTIVO);
+  }
 }
 
 // ---- Helpers de recetas ----
@@ -86,8 +93,9 @@ function recetasPorTipo(tipo) {
 
 // ---- Estado de la UI ----
 let menus = cargarMenus();
-sembrarMenuInicial();
-menus = cargarMenus(); // recargar tras el seed
+if (sembrarMenuInicial()) {
+  menus = cargarMenus(); // recargar tras el seed
+}
 let activo = cargarActivo();
 let editando = null; // null = no editando, objeto = menú en edición
 
@@ -115,7 +123,10 @@ function renderSelect() {
   });
 
   sel.value = activo || "";
-  $("#btn-eliminar").disabled = !activo;
+  const tieneActivo = !!activo;
+  ["#btn-eliminar", "#btn-editar", "#btn-clonar"].forEach((selBtn) => {
+    $(selBtn).disabled = !tieneActivo;
+  });
 }
 
 function renderEditor() {
@@ -220,8 +231,40 @@ $("#btn-cancelar").addEventListener("click", () => {
   renderMenu();
 });
 
+$("#btn-editar").addEventListener("click", () => {
+  if (!activo) return;
+  const menu = menus.find((m) => m.id === activo);
+  if (!menu) return;
+  editando = {
+    id: menu.id,
+    nombre: menu.nombre,
+    dias: JSON.parse(JSON.stringify(menu.dias)), // copia profunda
+  };
+  renderEditor();
+});
+
+$("#btn-clonar").addEventListener("click", () => {
+  if (!activo) return;
+  const menu = menus.find((m) => m.id === activo);
+  if (!menu) return;
+  const clon = {
+    id: "menu-" + Date.now(),
+    nombre: menu.nombre + " (copia)",
+    dias: JSON.parse(JSON.stringify(menu.dias)),
+  };
+  menus.push(clon);
+  guardarMenus(menus);
+  activo = clon.id;
+  guardarActivo(activo);
+  renderSelect();
+  renderMenu();
+});
+
 $("#btn-eliminar").addEventListener("click", () => {
   if (!activo) return;
+  const menu = menus.find((m) => m.id === activo);
+  const nombre = menu ? menu.nombre : "este menú";
+  if (!confirm(`¿Eliminar el menú "${nombre}"?`)) return;
   menus = menus.filter((m) => m.id !== activo);
   guardarMenus(menus);
   activo = null;
@@ -266,7 +309,10 @@ $("#btn-guardar").addEventListener("click", () => {
 $("#menu-select").addEventListener("change", (e) => {
   activo = e.target.value || null;
   guardarActivo(activo);
-  $("#btn-eliminar").disabled = !activo;
+  const tieneActivo = !!activo;
+  ["#btn-eliminar", "#btn-editar", "#btn-clonar"].forEach((selBtn) => {
+    $(selBtn).disabled = !tieneActivo;
+  });
   renderMenu();
 });
 
