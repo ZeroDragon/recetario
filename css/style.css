@@ -55,11 +55,18 @@ body {
   border-bottom: 1px solid var(--border);
 }
 
-.site-brand {
-  display: block;
+.site-header-inner {
   max-width: var(--content-width);
   margin: 0 auto;
-  padding: 1rem 1.5rem;
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.site-brand {
   font-weight: 700;
   font-size: 1.25rem;
   color: var(--text);
@@ -68,6 +75,26 @@ body {
 }
 
 .site-brand:hover { color: var(--accent); }
+
+.site-nav {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.site-nav a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.95rem;
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.site-nav a:hover {
+  color: var(--text);
+  background: var(--surface-2);
+}
 
 .site-footer {
   max-width: var(--content-width);
@@ -163,6 +190,57 @@ h1 {
 .receta li { margin-bottom: 0.4rem; }
 .receta li::marker { color: var(--accent); }
 
+/* Task lists (lista de compras) */
+.contains-task-list {
+  list-style: none;
+  padding-left: 0.25rem;
+}
+
+.contains-task-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.35rem 0;
+}
+
+.contains-task-list input[type="checkbox"] {
+  appearance: none;
+  width: 1.1em;
+  height: 1.1em;
+  border: 2px solid var(--border-strong);
+  border-radius: 4px;
+  background: var(--bg-deep);
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.contains-task-list input[type="checkbox"]:hover {
+  border-color: var(--accent);
+}
+
+.contains-task-list input[type="checkbox"]:checked {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.contains-task-list input[type="checkbox"]:checked::after {
+  content: "✓";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--accent-ink);
+  font-size: 0.85em;
+  font-weight: 700;
+}
+
+.contains-task-list li:has(input:checked) {
+  color: var(--text-muted);
+  text-decoration: line-through;
+}
+
 .receta strong { color: var(--accent-strong); }
 
 .receta blockquote {
@@ -221,4 +299,44 @@ h1 {
   body { font-size: 16px; }
   h1 { font-size: 1.8rem; }
   main { padding-top: 1.5rem; }
+}
+
+/* ---------- ribbon "Fork me on GitHub" ---------- */
+
+.github-ribbon {
+  position: fixed;
+  top: 30px;
+  right: -65px;
+  transform: rotate(45deg);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.5rem 3.8rem;
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+  color: var(--accent-ink);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.45);
+  z-index: 100;
+  transition: filter 0.15s ease, transform 0.15s ease;
+}
+
+.github-ribbon:hover {
+  filter: brightness(1.15);
+  transform: rotate(45deg) scale(1.03);
+}
+
+.github-ribbon svg { flex-shrink: 0; }
+
+/* Evitar que el ribbon tape la nav en pantallas medianas */
+@media (min-width: 701px) and (max-width: 1150px) {
+  .site-header-inner { padding-right: 8.5rem; }
+}
+
+/* En pantallas pequeñas: solo el icono, más compacto */
+@media (max-width: 700px) {
+  .github-ribbon span { display: none; }
+  .github-ribbon { padding: 0.45rem 2.3rem; }
 }

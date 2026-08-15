@@ -1,4 +1,13 @@
+import markdownIt from "markdown-it";
+import taskLists from "markdown-it-task-lists";
+
 export default function (eleventyConfig) {
+  // Markdown: activar task lists ([ ] / [x]) para la lista de compras
+  eleventyConfig.setLibrary(
+    "md",
+    markdownIt({ html: true, linkify: true, typographer: true }).use(taskLists)
+  );
+
   // CSS estático se copia tal cual al output
   eleventyConfig.addPassthroughCopy("css");
 
