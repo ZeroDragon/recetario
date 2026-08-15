@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>{% if title %}{{ title }} · Recetario{% else %}Recetario{% endif %}</title>
+  <title>{% if title %}{{ title }} · Menu Maker{% else %}Menu Maker{% endif %}</title>
   <link rel="stylesheet" href="{{ '/css/style.css' | url }}">
 </head>
 <body>
   <header class="site-header">
     <div class="site-header-inner">
-      <a class="site-brand" href="{{ '/' | url }}">Recetario</a>
+      <a class="site-brand" href="{{ '/' | url }}">Menu Maker</a>
       <nav class="site-nav">
         <a href="{{ '/' | url }}">Recetas</a>
         <a href="{{ '/menu/' | url }}">Menú</a>
@@ -21,7 +21,7 @@
     {{ content | safe }}
   </main>
   <footer class="site-footer">
-    <p>Recetario · hecho a mano, receta por receta</p>
+    <p>Menu Maker · hecho a mano, receta por receta</p>
   </footer>
 
   {% if page.url == "/compras/" %}
