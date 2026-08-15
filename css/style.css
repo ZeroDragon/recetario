@@ -1,0 +1,224 @@
+/* ============================================================
+   Recetario — tema oscuro
+   PALETA: provisional (VSCode Dark+). Pendiente: ajustar con el
+   tema de VSCode que Carlos eligió. Todo vive en :root, se cambia
+   en un solo lugar.
+   ============================================================ */
+
+:root {
+  /* Paleta — Monospace IDX Dark (VSCode), https://github.com/amnweb/monospace-idx-theme */
+  --bg: #171f2b;            /* editor.background */
+  --bg-deep: #10151d;       /* tabs/activityBar/sideBar/panel */
+  --surface: #1f2939;       /* widgets/inputs/statusBar */
+  --surface-2: #293444;     /* hover/selection intenso */
+  --border: #333e4f;        /* tab.border / panel.border */
+  --border-strong: #5d6a7d; /* editorWidget.border */
+  --text: #d9dfe7;          /* editor.foreground */
+  --text-muted: #a4afbd;    /* tab.inactiveForeground */
+  --accent: #a87ffb;        /* button.background (violeta IDX) */
+  --accent-strong: #bd9cfe; /* entity — violeta claro */
+  --accent-ink: #000000;    /* texto sobre --accent (button.foreground) */
+  --blue: #92a9ff;          /* constant/support */
+  --green: #77d5a3;         /* string/tag */
+  --red: #fd8da3;           /* keyword */
+  --cyan: #85cdf1;          /* strings en HTML */
+  --comment: #7f8d9f;       /* comentarios */
+  --cursor: #e0ccff;        /* cursor del editor */
+  --radius: 10px;
+  --content-width: 46rem;
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html { color-scheme: dark; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  line-height: 1.65;
+  font-size: 17px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- header / footer ---------- */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: color-mix(in srgb, var(--bg) 85%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+}
+
+.site-brand {
+  display: block;
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding: 1rem 1.5rem;
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--text);
+  text-decoration: none;
+  letter-spacing: 0.01em;
+}
+
+.site-brand:hover { color: var(--accent); }
+
+.site-footer {
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding: 2rem 1.5rem 3rem;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  border-top: 1px solid var(--border);
+  margin-top: 3rem;
+}
+
+.site-footer p { margin: 0; }
+
+/* ---------- layout ---------- */
+
+main {
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding: 2rem 1.5rem 1rem;
+}
+
+/* ---------- índice ---------- */
+
+h1 {
+  font-size: 2.25rem;
+  line-height: 1.2;
+  margin: 0 0 0.5rem;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+
+.subtitle { color: var(--text-muted); margin: 0 0 2rem; }
+
+.recipe-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.recipe-list a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9rem 1.1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  text-decoration: none;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.recipe-list a::after {
+  content: "→";
+  color: var(--accent);
+  font-weight: 700;
+  transition: transform 0.15s ease;
+}
+
+.recipe-list a:hover {
+  border-color: var(--accent);
+  background: var(--surface-2);
+}
+
+.recipe-list a:hover::after { transform: translateX(3px); }
+
+.recipe-count {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin: -1rem 0 2rem;
+}
+
+/* ---------- contenido de receta ---------- */
+
+.receta h1 { margin-bottom: 1rem; }
+.receta h2 {
+  font-size: 1.4rem;
+  margin: 2.25rem 0 0.75rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid var(--border);
+}
+.receta h3 { font-size: 1.15rem; margin: 1.75rem 0 0.5rem; }
+
+.receta p { margin: 0 0 1rem; }
+
+.receta a { color: var(--accent); }
+.receta a:hover { color: var(--accent-strong); }
+
+.receta ul, .receta ol { margin: 0 0 1.25rem; padding-left: 1.5rem; }
+.receta li { margin-bottom: 0.4rem; }
+.receta li::marker { color: var(--accent); }
+
+.receta strong { color: var(--accent-strong); }
+
+.receta blockquote {
+  margin: 0 0 1.25rem;
+  padding: 0.75rem 1.25rem;
+  border-left: 3px solid var(--accent);
+  background: var(--surface);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  color: var(--text-muted);
+}
+
+.receta code {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 0.1em 0.35em;
+  font-size: 0.9em;
+}
+
+.receta pre {
+  background: var(--bg-deep);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+  overflow-x: auto;
+}
+
+.receta pre code { background: none; border: none; padding: 0; }
+
+.receta table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 1.25rem;
+  font-size: 0.95em;
+}
+
+.receta th, .receta td {
+  border: 1px solid var(--border);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+
+.receta th { background: var(--surface); }
+.receta tbody tr:nth-child(even) { background: var(--bg-deep); }
+
+/* ---------- accesibilidad ---------- */
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ---------- responsive ---------- */
+
+@media (max-width: 600px) {
+  body { font-size: 16px; }
+  h1 { font-size: 1.8rem; }
+  main { padding-top: 1.5rem; }
+}

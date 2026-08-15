@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% if title %}{{ title }} · Recetario{% else %}Recetario{% endif %}</title>
+  <link rel="stylesheet" href="{{ '/css/style.css' | url }}">
+</head>
+<body>
+  <header class="site-header">
+    <a class="site-brand" href="{{ '/' | url }}">Recetario</a>
+  </header>
+  <main>
+    {{ content | safe }}
+  </main>
+  <footer class="site-footer">
+    <p>Recetario · hecho a mano, receta por receta</p>
+  </footer>
+</body>
+</html>

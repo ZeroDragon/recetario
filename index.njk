@@ -1,0 +1,12 @@
+---
+layout: base.njk
+---
+<h1>Recetario</h1>
+<p class="subtitle">Todas las recetas, en un solo lugar.</p>
+<p class="recipe-count">{{ collections.receta.length }} {% if collections.receta.length == 1 %}receta{% else %}recetas{% endif %}</p>
+
+<ul class="recipe-list">
+{%- for receta in collections.receta | sort(false, false, "data.title") %}
+  <li><a href="{{ receta.url | url }}">{{ receta.data.title }}</a></li>
+{%- endfor %}
+</ul>
