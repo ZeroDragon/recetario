@@ -4,38 +4,103 @@ title: Lista de compras
 ---
 # Lista de compras
 
-Ingredientes para surtir el menú semanal.
+Ingredientes para surtir el menú semanal para 2 personas.
+
+Las cantidades incluyen un pequeño margen cuando resulta práctico comprar
+paquetes completos.
 
 ## Proteínas
 
-- [ ] Pechuga de pollo (1 kg)
-- [ ] Carne de res para fajitas (500 g)
-- [ ] Atún en agua (3 latas)
-- [ ] Huevos (1 docena)
+- [ ] Pechuga de pollo (3.6–4 kg)
+- [ ] Carne de res magra para fajitas (1.1–1.2 kg)
+- [ ] Atún en agua (6 latas)
+- [ ] Huevos (18 piezas)
+- [ ] Claras de huevo pasteurizadas (1 litro)
+- [ ] Falcon Protein (5 scoops / aproximadamente 160 g)
 
 ## Lácteos
 
-- [ ] Yogurt natural (1 L)
-- [ ] Queso fresco (200 g)
+- [ ] Leche deslactosada entera (4 litros)
+- [ ] Yogur griego natural sin azúcar (1.2 kg)
 
-## Frutas y verduras
-
-- [ ] Aguacate (2 piezas)
-- [ ] Pepino (1 pieza)
-- [ ] Zanahorias (3 piezas)
-- [ ] Cebolla (1 pieza)
-- [ ] Pimientos (2 piezas)
-- [ ] Nopales (300 g)
-- [ ] Avena (500 g)
-
-## Despensa
+## Cereales, leguminosas y tortillas
 
 - [ ] Arroz (1 kg)
+- [ ] Frijol seco (1.5 kg) o equivalente ya cocido
+- [ ] Avena (500 g)
+- [ ] Tortillas de maíz (aproximadamente 50 piezas)
+
+## Verduras
+
+- [ ] Jitomate (2.5–3 kg)
+- [ ] Cebolla (1.5 kg)
+- [ ] Ajo (2 cabezas)
+- [ ] Pimientos (6 piezas)
+- [ ] Nopales (1 kg)
+- [ ] Pepinos (2 piezas)
+- [ ] Zanahorias (4 piezas)
+- [ ] Repollo (1 pieza mediana)
+- [ ] Verduras para asar o al vapor (2–2.5 kg)
+- [ ] Cebollín (1 manojo)
+- [ ] Chiles frescos al gusto
+- [ ] Chipotles adobados (1 lata)
+- [ ] Limones (10–12 piezas)
+
+## Frutas
+
+- [ ] Plátanos (7–8 piezas)
+- [ ] Manzanas (2–3 piezas)
+- [ ] Aguacates (4–5 piezas)
+- [ ] Fruta adicional de temporada (opcional)
+
+## Grasas, semillas y complementos
+
 - [ ] Aceite de oliva (500 mL)
-- [ ] Salsa de soya
-- [ ] Limones (4 piezas)
-- [ ] Ajo (1 cabeza)
+- [ ] Cacahuate natural sin azúcar (100–150 g)
+- [ ] Semillas de sésamo / ajonjolí (50 g)
+- [ ] Aderezo light tipo Mil Islas, chipotle o similar (1 botella)
+- [ ] Salsa de soya reducida en sodio (1 botella)
 
-## Suplementos
+## Condimentos
 
-- [ ] Proteína en polvo (1 bote)
+- [ ] Paprika
+- [ ] Comino
+- [ ] Orégano
+- [ ] Canela
+- [ ] Pimienta negra
+- [ ] Sal
+- [ ] Salsa mexicana al gusto
+
+
+# Preparación semanal
+
+## Sábado
+
+- [ ] Cocer el arroz destinado a la ensalada de atún.
+- [ ] Extenderlo para enfriarlo rápidamente.
+- [ ] Refrigerarlo una vez frío para preparar el arroz crispy al día siguiente.
+- [ ] Dejar descongelando en refrigeración las proteínas que se cocinarán el domingo.
+
+## Domingo
+
+- [ ] Cocer una tanda grande de frijoles.
+- [ ] Preparar el arroz para las guarniciones.
+- [ ] Preparar el arroz crispy de la ensalada de atún.
+- [ ] Hornear el pollo limón-ajo.
+- [ ] Preparar la tinga de pollo.
+- [ ] Preparar las fajitas de res, pimientos y nopales.
+- [ ] Asar o cocinar las verduras de las guarniciones.
+- [ ] Lavar y cortar las verduras de los desayunos.
+- [ ] Preparar las primeras porciones de avena nocturna.
+- [ ] Dividir las comidas principales en porciones para 2 personas.
+- [ ] Refrigerar las porciones de lunes a miércoles.
+- [ ] Congelar las porciones destinadas a jueves, viernes, sábado y domingo.
+
+## Preparación al momento
+
+- [ ] Cocinar los huevos justo antes de desayunar.
+- [ ] Agregar fruta y cacahuate a la avena al momento de consumir.
+- [ ] Preparar el batido Falcon después del entrenamiento.
+- [ ] Montar la ensalada de atún justo antes de comer para conservar crujiente el arroz.
+- [ ] Cortar el aguacate justo antes de servir.
+- [ ] Pasar del congelador al refrigerador la comida del día siguiente.
