@@ -1,5 +1,7 @@
 // Lista de compras: se genera automáticamente desde el menú activo (localStorage).
-// Sin persistencia de marcado: al recargar todo vuelve a estar sin marcar.
+// El marcado se persiste SOLO para el menú activo (por si cierras la app a media
+// compra). Al cambiar de menú o modificar el listado se descarta: no se acumula
+// estado de menús anteriores en memoria.
 
 // Recetas inyectadas desde 11ty (slug, title, tipo, ingredientes)
 // El dump genera { recetas: [...] }
@@ -7,6 +9,7 @@ const RECETAS = (window.RECETAS && window.RECETAS.recetas) || [];
 
 const STORAGE_MENUS = "recetario.menus";
 const STORAGE_ACTIVO = "recetario.menuActivo";
+const STORAGE_MARCADO = "recetario.comprasMarcado"; // { menuId, items: [...] } — solo el menú activo
 
 function cargarMenus() {
   try {
@@ -18,6 +21,44 @@ function cargarMenus() {
 
 function cargarActivo() {
   return localStorage.getItem(STORAGE_ACTIVO) || null;
+}
+
+// ---- Persistencia del marcado (solo menú activo, atado al listado) ----
+// Guarda { menuId, items, lista } donde `lista` es la firma del listado de
+// compras (array ordenado). Si el menú cambia o el listado se modifica, la
+// firma no coincide y el marcado se descarta (sin garbage acumulado).
+function firmaLista(formateados) {
+  return formateados.slice().sort((a, b) => a.localeCompare(b, "es"));
+}
+
+function cargarMarcado(menuId, formateados) {
+  if (!menuId) return new Set();
+  try {
+    const all = JSON.parse(localStorage.getItem(STORAGE_MARCADO)) || {};
+    // Descartar si no es el menú activo o si el listado cambió
+    const listaActual = firmaLista(formateados);
+    const listaGuardada = Array.isArray(all.lista) ? all.lista : null;
+    if (all.menuId !== menuId || !listaGuardada || listaGuardada.join("\u0000") !== listaActual.join("\u0000")) {
+      limpiarMarcado();
+      return new Set();
+    }
+    return new Set(Array.isArray(all.items) ? all.items : []);
+  } catch {
+    limpiarMarcado();
+    return new Set();
+  }
+}
+
+function guardarMarcado(menuId, marcados, formateados) {
+  if (!menuId) return;
+  localStorage.setItem(
+    STORAGE_MARCADO,
+    JSON.stringify({ menuId, items: Array.from(marcados), lista: firmaLista(formateados) })
+  );
+}
+
+function limpiarMarcado() {
+  localStorage.removeItem(STORAGE_MARCADO);
 }
 
 function recetaPorSlug(slug) {
@@ -124,9 +165,9 @@ function init() {
     });
   });
 
-  // Formatear: "cantidad unidad nombre" o "al-gusto nombre"
+  // Formatear: "cantidad unidad nombre", "nombre al gusto" o "nombre"
   const formateados = [...agregados.values()].map((a) => {
-    if (a.esAlGusto) return "al-gusto " + a.nombre;
+    if (a.esAlGusto) return a.nombre + " al gusto";
     if (a.cantidad !== null) {
       // Limpiar decimales innecesarios (400.0 -> 400)
       const cant = Number.isInteger(a.cantidad) ? a.cantidad : parseFloat(a.cantidad.toFixed(1));
@@ -138,27 +179,47 @@ function init() {
   info.textContent = `Menú: ${menu.nombre} — ${formateados.length} ingredientes`;
   resetBtn.hidden = false;
 
-  // Render como lista con checkboxes
+  // Render como lista con checkboxes; restaurar el marcado persistido SOLO si
+  // el menú activo y el listado son idénticos a cuando se guardó. Cualquier
+  // cambio (menú distinto, recetas editadas, cantidades modificadas) descarta
+  // el estado viejo para no dejar garbage.
+  const formateadosOrdenados = firmaLista(formateados);
+  const marcados = cargarMarcado(menu.id, formateadosOrdenados);
+
   let html = '<ul class="contains-task-list">';
-  formateados.sort((a, b) => a.localeCompare(b, "es")).forEach((ing) => {
-    html += `<li class="task-list-item"><input class="task-list-item-checkbox" type="checkbox"> ${ing}</li>`;
+  formateadosOrdenados.forEach((ing) => {
+    const checked = marcados.has(ing) ? " checked" : "";
+    html += `<li class="task-list-item"><input class="task-list-item-checkbox" type="checkbox"${checked}> ${ing}</li>`;
   });
   html += "</ul>";
   cont.innerHTML = html;
 
-  // Reset: desmarcar todo
+  // Guardar el estado al marcar/desmarcar (checkbox o clic en el renglón)
+  const persistirMarcado = () => {
+    const marcadosActuales = new Set(
+      Array.from(document.querySelectorAll('.contains-task-list input[type="checkbox"]:checked'))
+        .map((cb) => cb.closest(".task-list-item").textContent.trim())
+    );
+    guardarMarcado(menu.id, marcadosActuales, formateadosOrdenados);
+  };
+
+  // Reset: desmarcar todo y descartar el marcado guardado
   resetBtn.onclick = () => {
     document.querySelectorAll('.contains-task-list input[type="checkbox"]').forEach((cb) => {
       cb.checked = false;
     });
+    limpiarMarcado();
   };
 
-  // Clic en el renglón alterna el checkbox
+  // Clic en el renglón alterna el checkbox; el cambio dispara el guardado
   document.querySelectorAll(".task-list-item").forEach((li) => {
+    const cb = li.querySelector('input[type="checkbox"]');
+    if (!cb) return;
+    cb.addEventListener("change", persistirMarcado);
     li.addEventListener("click", (e) => {
       if (e.target.matches('input[type="checkbox"]')) return;
-      const cb = li.querySelector('input[type="checkbox"]');
-      if (cb) cb.checked = !cb.checked;
+      cb.checked = !cb.checked;
+      persistirMarcado();
     });
   });
 }
