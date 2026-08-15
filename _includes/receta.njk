@@ -2,5 +2,24 @@
 layout: base.njk
 ---
 <article class="receta">
+  <h1>{{ title }}{% if porciones_receta %}<span class="receta-porciones">{{ porciones_receta }} {% if porciones_receta == 1 %}porción{% else %}porciones{% endif %}</span>{% endif %}</h1>
+  {% if macros_por_porcion %}
+  <table class="tabla-macros">
+    <thead>
+      <tr>
+        <th>Macros</th>
+        <th>Por porción</th>
+        {% if porciones_receta > 1 %}<th>Receta completa ({{ porciones_receta }} porciones)</th>{% endif %}
+      </tr>
+    </thead>
+    <tbody>
+      {% if macros_por_porcion.calorias_kcal %}<tr><td>Calorías</td><td class="num-kcal">{{ macros_por_porcion.calorias_kcal }} kcal</td>{% if porciones_receta > 1 %}<td class="num-kcal">{{ macros_por_porcion.calorias_kcal * porciones_receta }} kcal</td>{% endif %}</tr>{% endif %}
+      {% if macros_por_porcion.proteina_g %}<tr><td>Proteína</td><td>{{ macros_por_porcion.proteina_g }} g</td>{% if porciones_receta > 1 %}<td>{{ macros_por_porcion.proteina_g * porciones_receta }} g</td>{% endif %}</tr>{% endif %}
+      {% if macros_por_porcion.carbohidratos_g %}<tr><td>Carbohidratos</td><td>{{ macros_por_porcion.carbohidratos_g }} g</td>{% if porciones_receta > 1 %}<td>{{ macros_por_porcion.carbohidratos_g * porciones_receta }} g</td>{% endif %}</tr>{% endif %}
+      {% if macros_por_porcion.grasas_g %}<tr><td>Grasas</td><td>{{ macros_por_porcion.grasas_g }} g</td>{% if porciones_receta > 1 %}<td>{{ macros_por_porcion.grasas_g * porciones_receta }} g</td>{% endif %}</tr>{% endif %}
+      {% if macros_por_porcion.fibra_g %}<tr><td>Fibra</td><td>{{ macros_por_porcion.fibra_g }} g</td>{% if porciones_receta > 1 %}<td>{{ macros_por_porcion.fibra_g * porciones_receta }} g</td>{% endif %}</tr>{% endif %}
+    </tbody>
+  </table>
+  {% endif %}
   {{ content | safe }}
 </article>
