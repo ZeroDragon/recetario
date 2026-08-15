@@ -725,6 +725,43 @@ main table {
   cursor: not-allowed;
 }
 
+/* Tabla colapsable de niveles de actividad */
+.detalle-actividad {
+  margin-top: 0.9rem;
+  border-top: 1px solid var(--border);
+  padding-top: 0.7rem;
+}
+
+.detalle-actividad summary {
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  user-select: none;
+  transition: color 0.15s ease;
+}
+
+.detalle-actividad summary:hover { color: var(--text); }
+
+.detalle-actividad summary::before {
+  content: "▸ ";
+  color: var(--accent);
+}
+
+.detalle-actividad[open] summary::before {
+  content: "▾ ";
+}
+
+.detalle-actividad .tabla-actividad {
+  margin: 0.6rem 0 0;
+  font-size: 0.85rem;
+}
+
+.detalle-actividad .tabla-actividad td:first-child {
+  color: var(--accent-strong);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
 /* Totales del día en el editor */
 .totales-dia {
   font-size: 0.78rem;
