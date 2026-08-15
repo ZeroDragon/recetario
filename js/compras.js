@@ -24,6 +24,32 @@ function recetaPorSlug(slug) {
   return RECETAS.find((r) => r.slug === slug) || null;
 }
 
+// Quita cantidad + unidad al inicio, igual que el typeahead de restricciones:
+// "500 mL leche" -> "leche", "200–250 ml leche" -> "leche", "≈300 g queso" -> "queso",
+// "1/2 taza avena" -> "avena", "3 cucharadas aceite" -> "aceite", "al-gusto sal" -> "sal".
+// NO convierte unidades: solo normaliza el texto para agrupar y sumar cuando
+// la unidad y el nombre coinciden (formato CANTIDAD UNIDAD NOMBRE).
+const RE_CANTIDAD = /^(?:al-gusto|\d+(?:[.,]\d+)?(?:\s*[–\-~]\s*\d+(?:[.,]\d+)?)?(?:\s*\/\s*\d+)?|≈\s*\d+(?:[.,]\d+)?)\s*(?:g|kg|ml|mL|l|L|u|tazas?|cucharadas?|cucharaditas?|piezas?|latas?|rebanadas?|dientes?|sobres?|scoops?|bolsas?|cajas?|puñados?|pizcas?|ramas?|hojas?|pzas?)\s+/;
+
+// Parsea "CANTIDAD UNIDAD NOMBRE" -> { cantidad, unidad, nombre } | null.
+// Acepta cantidades numéricas simples y rangos ("200–250") tomando el primer
+// número; las fracciones ("1/2") se tratan como texto (no parseable).
+function parseIngrediente(ing) {
+  const m = ing.match(/^([\d.,]+)\s+([A-Za-zÁÉÍÓÚáéíóúÑñ]+)\s+(.+)$/);
+  if (m) {
+    const cant = parseFloat(m[1].replace(",", "."));
+    if (!Number.isNaN(cant)) {
+      return { cantidad: cant, unidad: m[2], nombre: m[3].trim() };
+    }
+  }
+  return null;
+}
+
+// Unidad normalizada para comparar (ml == mL == ML): minúsculas sin acentos.
+function normUnidad(u) {
+  return String(u || "").toLowerCase().replace(/[áä]/g, "a").replace(/[éë]/g, "e").replace(/[íï]/g, "i").replace(/[óö]/g, "o").replace(/[úü]/g, "u").trim();
+}
+
 function init() {
   const cont = document.getElementById("compras-contenido");
   const info = document.getElementById("compras-info");
@@ -40,9 +66,9 @@ function init() {
     return;
   }
 
-  // Agregar ingredientes sumando cantidades por ingrediente
-  // Formato: "CANTIDAD UNIDAD NOMBRE" | "al-gusto NOMBRE"
-  const agregados = new Map(); // nombre -> { cantidad, unidad, esAlGusto }
+  // Agregar ingredientes sumando cantidades por ingrediente (unidad + nombre
+  // normalizado). No convierte unidades: solo suma cuando hacen match.
+  const agregados = new Map(); // key -> { cantidad, unidad, nombre, esAlGusto }
   DIAS_FOR.forEach((dia) => {
     const slots = menu.dias?.[dia];
     if (!slots) return;
@@ -57,23 +83,43 @@ function init() {
           agregados.set(`al-gusto ${nombre}`, { cantidad: null, unidad: "al-gusto", nombre, esAlGusto: true });
           return;
         }
-        // cantidad unidad nombre
-        const m = ing.match(/^([\d.,]+)\s+(g|kg|mL|L|u)\s+(.+)$/);
-        if (m) {
-          const cant = parseFloat(m[1].replace(",", "."));
-          const unidad = m[2];
-          const nombre = m[3].trim();
-          const key = `${unidad}|${nombre}`;
+        // cantidad unidad nombre (numérica simple o rango): sumar por unidad|nombre
+        const p = parseIngrediente(ing);
+        if (p) {
+          const key = `${normUnidad(p.unidad)}|${p.nombre}`;
           const prev = agregados.get(key);
           if (prev) {
-            prev.cantidad += cant;
+            prev.cantidad += p.cantidad;
           } else {
-            agregados.set(key, { cantidad: cant, unidad, nombre, esAlGusto: false });
+            agregados.set(key, { cantidad: p.cantidad, unidad: p.unidad, nombre: p.nombre, esAlGusto: false });
           }
           return;
         }
-        // Sin cantidad reconocible: dedupe por texto
-        agregados.set(ing, { cantidad: null, unidad: "", nombre: ing, esAlGusto: false });
+        // Formato no numérico simple (fracción "1/2", ≈, etc.): normalizar el
+        // nombre (quitar cantidad/unidad) para agrupar con los numéricos.
+        const nombreNorm = String(ing).toLowerCase().trim().replace(/\s+/g, " ").replace(RE_CANTIDAD, "");
+        const sinCantidad = nombreNorm ? nombreNorm : ing;
+        // Buscar si ya existe una entrada numérica con el mismo nombre (cualquier unidad)
+        let match = null;
+        for (const [, v] of agregados) {
+          if (v.esAlGusto) continue;
+          if (v.nombre.toLowerCase() === sinCantidad.toLowerCase()) { match = v; break; }
+        }
+        if (match) {
+          // Misma unidad normalizada: sumar la cantidad si se puede parsear;
+          // si no (fracción "1/2"), conservar la entrada existente y no duplicar.
+          const p2 = parseIngrediente(ing);
+          if (p2 && normUnidad(p2.unidad) === normUnidad(match.unidad)) {
+            match.cantidad += p2.cantidad;
+          } else if (p2) {
+            // Unidad distinta: no convertir; línea separada para ajuste manual.
+            agregados.set(ing, { cantidad: null, unidad: "", nombre: ing, esAlGusto: false });
+          }
+          // p2 == null (fracción/raro): ya hay una entrada del mismo nombre, no duplicar.
+          return;
+        }
+        // Sin match numérico: dedupe por texto normalizado
+        agregados.set(sinCantidad, { cantidad: null, unidad: "", nombre: sinCantidad, esAlGusto: false });
       });
     });
   });

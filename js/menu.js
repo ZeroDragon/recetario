@@ -98,6 +98,35 @@ const REGIMENES = {
   volumen: { p: 25, g: 25, c: 50 },       // Aumento muscular (Volumen)
 };
 
+// ---- Helpers de restricciones (alimentos a evitar) ----
+function normRestr(s) {
+  return String(s || "").toLowerCase().trim().replace(/\s+/g, " ");
+}
+
+// Restricción r contra el nombre de un ingrediente (match de subcadena normalizada)
+function coincideRestriccion(r, ing) {
+  const a = normRestr(r);
+  const b = normRestr(ing);
+  return !!a && !!b && (a.includes(b) || b.includes(a));
+}
+
+function ingredientesDeReceta(slug) {
+  const r = recetaPorSlug(slug);
+  return r && Array.isArray(r.ingredientes) ? r.ingredientes : [];
+}
+
+// Restricciones que coinciden con algún ingrediente del slug (array de strings)
+function restriccionesDeSlug(slug, restricciones) {
+  const lista = Array.isArray(restricciones) ? restricciones : [];
+  if (!lista.length) return [];
+  return lista.filter((r) => ingredientesDeReceta(slug).some((ing) => coincideRestriccion(r, ing)));
+}
+
+// Receta permitida (sin ingrediente restringido)
+function recetaPermitida(receta, restricciones) {
+  return !restriccionesDeSlug(receta.slug, restricciones).length;
+}
+
 // ---- Helpers de macros ----
 function macrosDeReceta(slug) {
   const r = recetaPorSlug(slug);
@@ -159,7 +188,10 @@ function comidasDeDia(diaKey) {
 // Genera un menú semanal: por día elige la combinación de recetas (una por
 // comida) que caiga en [kcalMin, kcalMax] y mejor se aproxime a los macros
 // del régimen, rotando recetas entre días para variar.
-function generarMenu(kcalMin, kcalMax, regimenKey) {
+// restricciones: alimentos a evitar; los platillos que los contengan quedan
+// fuera del pool. Si ningún combo válido cumple el rango, se usa el más
+// cercano (queda marcado como conflicto en la UI).
+function generarMenu(kcalMin, kcalMax, regimenKey, restricciones) {
   const regimen = REGIMENES[regimenKey] || REGIMENES.mantenimiento;
   const centro = (kcalMin + kcalMax) / 2;
   const historial = {}; // comida -> [slug más reciente, ...]
@@ -169,7 +201,9 @@ function generarMenu(kcalMin, kcalMax, regimenKey) {
     const comidas = comidasDeDia(dia.key);
     let combos = [[]];
     comidas.forEach((c) => {
-      const pool = recetasPorTipo(c.key).filter((r) => r.macros_por_porcion);
+      const pool = recetasPorTipo(c.key).filter(
+        (r) => r.macros_por_porcion && recetaPermitida(r, restricciones)
+      );
       const next = [];
       combos.forEach((pre) => pool.forEach((r) => next.push([...pre, { comida: c.key, receta: r }])));
       combos = next;
@@ -233,6 +267,38 @@ function renderSelect() {
   });
 }
 
+function renderRestricciones() {
+  const lista = $("#restricciones-lista");
+  if (!lista) return;
+  lista.innerHTML = "";
+  const restricciones = Array.isArray(editando.restricciones) ? editando.restricciones : [];
+
+  if (!restricciones.length) {
+    const vacio = document.createElement("span");
+    vacio.className = "restriccion-chip empty";
+    vacio.textContent = "Sin restricciones";
+    lista.appendChild(vacio);
+    return;
+  }
+
+  restricciones.forEach((r, i) => {
+    const chip = document.createElement("span");
+    chip.className = "restriccion-chip";
+    chip.textContent = r;
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.textContent = "✕";
+    btn.title = `Quitar "${r}"`;
+    btn.addEventListener("click", () => {
+      editando.restricciones.splice(i, 1);
+      renderRestricciones();
+      marcarConflictosEditor();
+    });
+    chip.appendChild(btn);
+    lista.appendChild(chip);
+  });
+}
+
 function renderEditor() {
   const editor = $("#menu-editor");
   const render = $("#menu-render");
@@ -253,6 +319,10 @@ function renderEditor() {
   $("#kcal-min").value = obj.kcalMin ?? "";
   $("#kcal-max").value = obj.kcalMax ?? "";
   $("#regimen-select").value = obj.regimen || "";
+
+  // Restricciones guardadas con el menú (si las hay)
+  if (!Array.isArray(editando.restricciones)) editando.restricciones = [];
+  renderRestricciones();
 
   const tbody = $("#menu-tabla tbody");
   tbody.innerHTML = "";
@@ -305,6 +375,35 @@ function renderEditor() {
   actualizarTotalesEditor();
 }
 
+// Marca los selects cuyo platillo tiene algún ingrediente restringido y pone
+// un aviso en la columna de totales del día. No bloquea el guardado.
+function marcarConflictosEditor() {
+  const restricciones = Array.isArray(editando.restricciones) ? editando.restricciones : [];
+  document.querySelectorAll("#menu-tabla tbody tr").forEach((tr) => {
+    const avisos = [];
+    let conConflicto = false;
+    tr.querySelectorAll("select").forEach((sel) => {
+      const slug = sel.value;
+      const hits = slug ? restriccionesDeSlug(slug, restricciones) : [];
+      sel.classList.toggle("conflicto", hits.length > 0);
+      if (hits.length) {
+        conConflicto = true;
+        avisos.push(`${sel.dataset.comida}: ${hits.join(", ")}`);
+        sel.title = `Contiene: ${hits.join(", ")}`;
+      } else {
+        sel.title = "";
+      }
+    });
+    const td = tr.querySelector(".totales-dia");
+    if (td) td.classList.toggle("con-conflicto", conConflicto);
+    if (conConflicto) {
+      td.title = `Conflicto con restricciones: ${avisos.join(" · ")}`;
+    } else if (td && !td.title.includes("Fuera del rango")) {
+      td.title = "";
+    }
+  });
+}
+
 function actualizarTotalesEditor() {
   document.querySelectorAll("#menu-tabla tbody tr").forEach((tr) => {
     const slugs = Array.from(tr.querySelectorAll("select"))
@@ -331,6 +430,7 @@ function actualizarTotalesEditor() {
       td.classList.remove("dentro-rango", "fuera-rango");
     }
   });
+  marcarConflictosEditor(); // los avisos de restricción viven en el title del select
 }
 
 function renderMenu() {
@@ -349,6 +449,7 @@ function renderMenu() {
   }
 
   titulo.textContent = menu.nombre;
+  const restricciones = Array.isArray(menu.restricciones) ? menu.restricciones : [];
   let html = '<div class="menu-grid">';
 
   DIAS.forEach((dia) => {
@@ -360,7 +461,11 @@ function renderMenu() {
       const slug = menu.dias[dia.key][c.key];
       const receta = recetaPorSlug(slug);
       const nombre = receta ? receta.title : slug;
-      html += `<li><span class="comida-label">${c.label}:</span> <a href="/recetario/recipes/${slug}/">${nombre}</a></li>`;
+      const hits = restriccionesDeSlug(slug, restricciones);
+      const aviso = hits.length
+        ? ` <span class="aviso-conflicto" title="Contiene: ${hits.join(", ")}">⚠ ${hits.join(", ")}</span>`
+        : "";
+      html += `<li><span class="comida-label">${c.label}:</span> <a href="/recetario/recipes/${slug}/">${nombre}</a>${aviso}</li>`;
     });
 
     // Totales del día (kcal + macros) + verificación contra el objetivo
@@ -451,10 +556,152 @@ $("#btn-usar-get").addEventListener("click", () => {
   actualizarTotalesEditor();
 });
 
+// ---- Typeahead de restricciones ----
+// Sugiere ingredientes reales de todas las recetas (front matter), deduplicados.
+// Normaliza quitando la cantidad y unidad iniciales para agrupar por nombre.
+function ingredientesUnicos() {
+  const set = new Set();
+  RECETAS.forEach((r) => {
+    (r.ingredientes || []).forEach((ing) => {
+      const limpio = normRestr(ing).replace(limpiaCantidad, "");
+      if (limpio) set.add(limpio);
+    });
+  });
+  return Array.from(set).sort((a, b) => a.localeCompare(b, "es"));
+}
+
+// Quita cantidad + unidad al inicio: "500 mL leche", "200–250 ml leche",
+// "≈300 g queso", "1/2 taza avena", "3 cucharadas aceite", "al-gusto sal", …
+const limpiaCantidad = /^(?:al-gusto|\d+(?:[.,]\d+)?(?:\s*[–\-~]\s*\d+(?:[.,]\d+)?)?(?:\s*\/\s*\d+)?|≈\s*\d+(?:[.,]\d+)?)\s*(?:g|kg|ml|mL|l|L|u|tazas?|cucharadas?|cucharaditas?|piezas?|latas?|rebanadas?|dientes?|sobres?|scoops?|bolsas?|cajas?|puñados?|pizcas?|ramas?|hojas?|pzas?)\s+/;
+
+const INGREDIENTES_UNICOS = ingredientesUnicos();
+let typeaheadActivo = -1; // índice del item resaltado en el dropdown
+
+function mostrarSugerencias() {
+  const input = $("#restriccion-input");
+  const menu = $("#restriccion-sugerencias");
+  if (!input || !menu || !editando) return;
+  const q = normRestr(input.value);
+  if (q.length < 2) {
+    ocultarSugerencias();
+    return;
+  }
+  const yaAgregados = new Set((editando.restricciones || []).map(normRestr));
+  const candidatos = INGREDIENTES_UNICOS.filter(
+    (i) => i.includes(q) && !yaAgregados.has(i)
+  ).slice(0, 12);
+
+  if (!candidatos.length) {
+    menu.innerHTML = '<span class="typeahead-vacio">Sin coincidencias</span>';
+    menu.hidden = false;
+    input.setAttribute("aria-expanded", "true");
+    typeaheadActivo = -1;
+    return;
+  }
+
+  menu.innerHTML = "";
+  candidatos.forEach((cand, i) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "typeahead-item";
+    btn.textContent = cand;
+    btn.setAttribute("role", "option");
+    btn.addEventListener("mousedown", (e) => {
+      e.preventDefault(); // evita el blur antes del click
+      seleccionarSugerencia(cand);
+    });
+    menu.appendChild(btn);
+  });
+  menu.hidden = false;
+  input.setAttribute("aria-expanded", "true");
+  typeaheadActivo = -1;
+}
+
+function ocultarSugerencias() {
+  const menu = $("#restriccion-sugerencias");
+  if (!menu) return;
+  menu.hidden = true;
+  const input = $("#restriccion-input");
+  if (input) input.setAttribute("aria-expanded", "false");
+  typeaheadActivo = -1;
+}
+
+function seleccionarSugerencia(texto) {
+  const input = $("#restriccion-input");
+  input.value = texto;
+  ocultarSugerencias();
+  agregarRestriccion();
+}
+
+function moverActivo(delta) {
+  const menu = $("#restriccion-sugerencias");
+  if (!menu || menu.hidden) return false;
+  const items = Array.from(menu.querySelectorAll(".typeahead-item"));
+  if (!items.length) return false;
+  if (typeaheadActivo >= 0) items[typeaheadActivo].classList.remove("activo");
+  typeaheadActivo = (typeaheadActivo + delta + items.length) % items.length;
+  items[typeaheadActivo].classList.add("activo");
+  items[typeaheadActivo].scrollIntoView({ block: "nearest" });
+  return true;
+}
+
+function agregarRestriccion() {
+  if (!editando) return;
+  const input = $("#restriccion-input");
+  const valor = normRestr(input.value);
+  if (!valor) {
+    alert("Escribe un alimento a restringir.");
+    return;
+  }
+  if (!Array.isArray(editando.restricciones)) editando.restricciones = [];
+  if (editando.restricciones.some((r) => normRestr(r) === valor)) {
+    alert("Ese alimento ya está en la lista.");
+    return;
+  }
+  editando.restricciones.push(valor);
+  input.value = "";
+  renderRestricciones();
+  marcarConflictosEditor();
+}
+
 // ---- Eventos ----
 $("#btn-nuevo").addEventListener("click", () => {
-  editando = { id: null, nombre: "", dias: {}, objetivo: {} };
+  editando = { id: null, nombre: "", dias: {}, objetivo: {}, restricciones: [] };
   renderEditor();
+});
+
+$("#btn-agregar-restriccion").addEventListener("click", agregarRestriccion);
+$("#restriccion-input").addEventListener("input", mostrarSugerencias);
+$("#restriccion-input").addEventListener("focus", mostrarSugerencias);
+$("#restriccion-input").addEventListener("blur", () => {
+  // Pequeño delay para que un click en el dropdown (mousedown) alcance a
+  // seleccionar antes de ocultar.
+  setTimeout(ocultarSugerencias, 120);
+});
+$("#restriccion-input").addEventListener("keydown", (e) => {
+  if (e.key === "ArrowDown") {
+    e.preventDefault();
+    if (!moverActivo(1)) mostrarSugerencias();
+  } else if (e.key === "ArrowUp") {
+    e.preventDefault();
+    moverActivo(-1);
+  } else if (e.key === "Enter") {
+    const menu = $("#restriccion-sugerencias");
+    const items = menu && !menu.hidden ? Array.from(menu.querySelectorAll(".typeahead-item")) : [];
+    if (typeaheadActivo >= 0 && items[typeaheadActivo]) {
+      e.preventDefault();
+      seleccionarSugerencia(items[typeaheadActivo].textContent);
+    } else {
+      e.preventDefault();
+      agregarRestriccion();
+    }
+  } else if (e.key === "Escape") {
+    ocultarSugerencias();
+  }
+});
+document.addEventListener("click", (e) => {
+  const caja = $("#typeahead-restriccion");
+  if (caja && !caja.contains(e.target)) ocultarSugerencias();
 });
 
 $("#btn-auto").addEventListener("click", () => {
@@ -473,7 +720,7 @@ $("#btn-auto").addEventListener("click", () => {
   }
 
   editando.objetivo = { kcalMin, kcalMax, regimen };
-  editando.dias = generarMenu(kcalMin, kcalMax, regimen);
+  editando.dias = generarMenu(kcalMin, kcalMax, regimen, editando.restricciones);
   renderEditor();
 
   // Avisar si algún día queda fuera del rango (no hay combo que cumpla)
@@ -506,6 +753,7 @@ $("#btn-editar").addEventListener("click", () => {
     nombre: menu.nombre,
     dias: JSON.parse(JSON.stringify(menu.dias)), // copia profunda
     objetivo: JSON.parse(JSON.stringify(menu.objetivo || {})),
+    restricciones: JSON.parse(JSON.stringify(menu.restricciones || [])),
   };
   renderEditor();
 });
@@ -519,6 +767,7 @@ $("#btn-clonar").addEventListener("click", () => {
     nombre: menu.nombre + " (copia)",
     dias: JSON.parse(JSON.stringify(menu.dias)),
     objetivo: JSON.parse(JSON.stringify(menu.objetivo || {})),
+    restricciones: JSON.parse(JSON.stringify(menu.restricciones || [])),
   };
   menus.push(clon);
   guardarMenus(menus);
@@ -563,11 +812,23 @@ $("#btn-guardar").addEventListener("click", () => {
   const regimen = $("#regimen-select").value;
   const objetivo = kcalMin && kcalMax && regimen ? { kcalMin, kcalMax, regimen } : {};
 
+  // Restricciones del editor (persistidas tal cual)
+  const restricciones = Array.isArray(editando.restricciones) ? editando.restricciones : [];
+
+  // Avisar (sin bloquear) los platillos con ingredientes restringidos
+  const conflictos = [];
+  Object.entries(dias).forEach(([dia, comidas]) => {
+    Object.entries(comidas).forEach(([comida, slug]) => {
+      const hits = restriccionesDeSlug(slug, restricciones);
+      if (hits.length) conflictos.push(`${comida} ${dia}: ${hits.join(", ")}`);
+    });
+  });
+
   if (editando.id) {
     const idx = menus.findIndex((m) => m.id === editando.id);
-    if (idx >= 0) menus[idx] = { ...menus[idx], nombre, dias, objetivo };
+    if (idx >= 0) menus[idx] = { ...menus[idx], nombre, dias, objetivo, restricciones };
   } else {
-    const nuevo = { id: "menu-" + Date.now(), nombre, dias, objetivo };
+    const nuevo = { id: "menu-" + Date.now(), nombre, dias, objetivo, restricciones };
     menus.push(nuevo);
     activo = nuevo.id;
     guardarActivo(activo);
@@ -578,6 +839,14 @@ $("#btn-guardar").addEventListener("click", () => {
   renderSelect();
   renderEditor();
   renderMenu();
+
+  if (conflictos.length) {
+    alert(
+      "Menú guardado con avisos de restricción:\n\n" +
+        conflictos.join("\n") +
+        "\n\nLos platillos marcados contienen alimentos restringidos; puedes cambiarlos desde Editar."
+    );
+  }
 });
 
 $("#menu-select").addEventListener("change", (e) => {

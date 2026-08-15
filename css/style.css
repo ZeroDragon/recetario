@@ -792,6 +792,172 @@ main table {
 .objetivo-ok { color: var(--green); font-weight: 600; }
 .objetivo-no { color: var(--red); font-weight: 600; }
 
+/* Restricciones del menú */
+.restricciones {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.9rem 1rem;
+  margin: 0 0 1.25rem;
+}
+
+.restricciones legend {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--red);
+  padding: 0 0.4rem;
+}
+
+.restricciones-ayuda {
+  margin: 0 0 0.7rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.restricciones-fila {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.restricciones-fila input[type="text"] {
+  flex: 1 1 12rem;
+  font-family: inherit;
+  font-size: 0.95rem;
+  padding: 0.55rem 0.7rem;
+  border-radius: 8px;
+  background: var(--bg-deep);
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+}
+
+/* Typeahead del input de restricciones */
+.typeahead {
+  position: relative;
+  flex: 1 1 12rem;
+}
+
+.typeahead input[type="text"] {
+  width: 100%;
+  flex: none;
+}
+
+.typeahead-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 20;
+  max-height: 14rem;
+  overflow-y: auto;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+  padding: 0.25rem;
+}
+
+.typeahead-menu .typeahead-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  font-family: inherit;
+  font-size: 0.9rem;
+  padding: 0.45rem 0.6rem;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.typeahead-menu .typeahead-item:hover,
+.typeahead-menu .typeahead-item.activo {
+  background: var(--surface-2);
+  color: var(--accent-strong);
+}
+
+.typeahead-menu .typeahead-vacio {
+  display: block;
+  padding: 0.45rem 0.6rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+#btn-agregar-restriccion {
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.55rem 1rem;
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+#btn-agregar-restriccion:hover { border-color: var(--accent); background: var(--surface-2); }
+
+.restricciones-lista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: 0.7rem;
+}
+
+.restriccion-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: color-mix(in srgb, var(--red) 12%, transparent);
+  color: var(--red);
+  border: 1px solid color-mix(in srgb, var(--red) 40%, transparent);
+  border-radius: 999px;
+  padding: 0.25rem 0.35rem 0.25rem 0.75rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.restriccion-chip button {
+  border: none;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font-size: 0.9rem;
+  line-height: 1;
+  padding: 0.15rem 0.4rem;
+  border-radius: 999px;
+}
+
+.restriccion-chip button:hover { background: color-mix(in srgb, var(--red) 25%, transparent); }
+
+.restriccion-chip.empty {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px dashed var(--border);
+  font-weight: 400;
+}
+
+/* Select de receta con ingrediente restringido */
+.receta-select.conflicto {
+  border-color: var(--red);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--red) 22%, transparent);
+  color: var(--red);
+}
+
+.totales-dia.con-conflicto {
+  color: var(--red);
+  font-weight: 600;
+}
+
+/* Aviso de conflicto en el render del menú */
+.aviso-conflicto {
+  color: var(--red);
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
 #menu-tabla {
   width: 100%;
   border-collapse: collapse;

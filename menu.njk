@@ -20,6 +20,19 @@ title: Menú semanal
     <h2 id="editor-titulo">Nuevo menú</h2>
     <input type="text" id="menu-nombre" placeholder="Nombre del menú (ej. Semana 1)">
 
+    <fieldset class="restricciones">
+      <legend>🚫 Restricciones</legend>
+      <p class="restricciones-ayuda">Agrega los alimentos que NO deben aparecer en este menú. Al auto generar se excluyen los platillos que los contengan; si agregas uno con conflicto se marca, pero puedes guardar igual.</p>
+      <div class="restricciones-fila">
+        <div class="typeahead" id="typeahead-restriccion">
+          <input type="text" id="restriccion-input" placeholder="ej. queso, atún, aguacate…" autocomplete="off" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="restriccion-sugerencias">
+          <div id="restriccion-sugerencias" class="typeahead-menu" role="listbox" hidden></div>
+        </div>
+        <button id="btn-agregar-restriccion" type="button">Agregar</button>
+      </div>
+      <div id="restricciones-lista" class="restricciones-lista"></div>
+    </fieldset>
+
     <!-- Calculadora GMB/GET (Harris-Benedict) -->
     <fieldset class="calculadora">
       <legend>🧮 Calculadora GMB/GET (Harris-Benedict)</legend>
