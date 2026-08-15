@@ -20,6 +20,39 @@ title: Menú semanal
     <h2 id="editor-titulo">Nuevo menú</h2>
     <input type="text" id="menu-nombre" placeholder="Nombre del menú (ej. Semana 1)">
 
+    <!-- Calculadora GMB/GET (Harris-Benedict) -->
+    <fieldset class="calculadora">
+      <legend>🧮 Calculadora GMB/GET (Harris-Benedict)</legend>
+      <div class="calculadora-fila">
+        <label for="calc-sexo">Sexo</label>
+        <select id="calc-sexo">
+          <option value="m">Hombre</option>
+          <option value="f">Mujer</option>
+        </select>
+        <label for="calc-peso">Peso (kg)</label>
+        <input type="number" id="calc-peso" min="0" step="0.1" placeholder="80">
+        <label for="calc-altura">Altura (cm)</label>
+        <input type="number" id="calc-altura" min="0" step="1" placeholder="175">
+        <label for="calc-edad">Edad</label>
+        <input type="number" id="calc-edad" min="0" step="1" placeholder="30">
+        <label for="calc-actividad">Actividad</label>
+        <select id="calc-actividad">
+          <option value="1.2">Sedentario (1.2)</option>
+          <option value="1.375">Ligero (1.375)</option>
+          <option value="1.55">Moderado (1.55)</option>
+          <option value="1.725">Muy activo (1.725)</option>
+          <option value="1.9">Extra activo (1.9)</option>
+        </select>
+        <button id="btn-calcular" type="button">Calcular</button>
+      </div>
+      <p id="calc-resultado" class="calc-resultado" hidden>
+        <span class="calc-gmb"></span> · <span class="calc-get"></span>
+      </p>
+      <div class="calculadora-acciones">
+        <button id="btn-usar-get" type="button" disabled>Usar GET como base → kCal</button>
+      </div>
+    </fieldset>
+
     <fieldset class="generador">
       <legend>Objetivo diario</legend>
       <label for="kcal-min">kCal mín</label>

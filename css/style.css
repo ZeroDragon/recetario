@@ -624,6 +624,107 @@ main table {
 
 #btn-auto:hover { filter: brightness(1.1); }
 
+/* Calculadora GMB/GET */
+.calculadora {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.9rem 1rem;
+  margin: 0 0 1.25rem;
+}
+
+.calculadora legend {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--accent-strong);
+  padding: 0 0.4rem;
+}
+
+.calculadora-fila {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.calculadora label {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.calculadora input[type="number"] {
+  width: 6rem;
+  font-family: inherit;
+  font-size: 0.95rem;
+  padding: 0.55rem 0.7rem;
+  border-radius: 8px;
+  background: var(--bg-deep);
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+}
+
+.calculadora select {
+  font-family: inherit;
+  font-size: 0.95rem;
+  padding: 0.55rem 0.7rem;
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+  cursor: pointer;
+}
+
+#btn-calcular {
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding: 0.55rem 1rem;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  border: 1px solid var(--accent);
+  cursor: pointer;
+  transition: filter 0.15s ease;
+}
+
+#btn-calcular:hover { filter: brightness(1.1); }
+
+.calc-resultado {
+  margin: 0.7rem 0 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.calc-gmb { color: var(--blue); }
+.calc-get { color: var(--green); }
+
+.calculadora-acciones {
+  margin-top: 0.7rem;
+}
+
+#btn-usar-get {
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+#btn-usar-get:hover:not(:disabled) {
+  border-color: var(--accent);
+  background: var(--surface-2);
+}
+
+#btn-usar-get:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 /* Totales del día en el editor */
 .totales-dia {
   font-size: 0.78rem;

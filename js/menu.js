@@ -385,6 +385,72 @@ function renderMenu() {
   contenido.innerHTML = html;
 }
 
+// ---- Calculadora GMB/GET (Harris-Benedict) ----
+// Ecuación original de Harris-Benedict (1919)
+function calcularGMB(sexo, peso, altura, edad) {
+  if (sexo === "m") return 66.5 + 13.75 * peso + 5.003 * altura - 6.75 * edad;
+  return 655.1 + 9.563 * peso + 1.85 * altura - 4.676 * edad;
+}
+
+function calcularGET(gmb, factorActividad) {
+  return gmb * factorActividad;
+}
+
+// Rango de kCal según el régimen, tomando el GET como base
+function rangoParaRegimen(get, regimen) {
+  switch (regimen) {
+    case "definicion":
+      return { min: Math.round(get - 450), max: Math.round(get - 150) };
+    case "volumen":
+      return { min: Math.round(get + 150), max: Math.round(get + 450) };
+    case "mantenimiento":
+    default:
+      return { min: Math.round(get - 200), max: Math.round(get + 200) };
+  }
+}
+
+function leerDatosCalculadora() {
+  const sexo = $("#calc-sexo").value;
+  const peso = Number($("#calc-peso").value);
+  const altura = Number($("#calc-altura").value);
+  const edad = Number($("#calc-edad").value);
+  const actividad = Number($("#calc-actividad").value);
+  return { sexo, peso, altura, edad, actividad };
+}
+
+function datosCalculadoraValidos(d) {
+  return d.sexo && d.peso > 0 && d.altura > 0 && d.edad > 0 && d.actividad > 0;
+}
+
+$("#btn-calcular").addEventListener("click", () => {
+  const d = leerDatosCalculadora();
+  if (!datosCalculadoraValidos(d)) {
+    alert("Llena peso, altura y edad para calcular tu GMB/GET.");
+    return;
+  }
+  const gmb = calcularGMB(d.sexo, d.peso, d.altura, d.edad);
+  const get = calcularGET(gmb, d.actividad);
+  $(".calc-gmb").textContent = `GMB ${fmt(gmb)} kcal`;
+  $(".calc-get").textContent = `GET ${fmt(get)} kcal`;
+  $(".calc-get").dataset.get = get; // guardar GET para "Usar GET como base"
+  $("#calc-resultado").hidden = false;
+  $("#btn-usar-get").disabled = false;
+});
+
+$("#btn-usar-get").addEventListener("click", () => {
+  const get = Number($(".calc-get").dataset.get);
+  if (!get) return;
+  const regimen = $("#regimen-select").value;
+  if (!regimen) {
+    alert("Elige primero un régimen para calcular el rango.");
+    return;
+  }
+  const rango = rangoParaRegimen(get, regimen);
+  $("#kcal-min").value = rango.min;
+  $("#kcal-max").value = rango.max;
+  actualizarTotalesEditor();
+});
+
 // ---- Eventos ----
 $("#btn-nuevo").addEventListener("click", () => {
   editando = { id: null, nombre: "", dias: {}, objetivo: {} };
