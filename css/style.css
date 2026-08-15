@@ -501,17 +501,23 @@ main table {
 }
 
 .menu-dia ul { list-style: none; margin: 0; padding: 0; }
-.menu-dia li { padding: 0.25rem 0; }
+.menu-dia li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  padding: 0.25rem 0;
+}
 
 .comida-label {
-  display: inline-block;
-  min-width: 6.5rem;
+  flex: 0 0 6.5rem;   /* columna fija, no se encoge */
   color: var(--text-muted);
   font-size: 0.9rem;
 }
 
-.menu-dia a { color: var(--accent); }
-.menu-dia a:hover { color: var(--accent-strong); }
+.menu-dia a {
+  flex: 1 1 auto;      /* el nombre fluye a la derecha, sin wrap debajo del label */
+  min-width: 0;        /* permite que el texto largo haga wrap dentro de su columna */
+}
 
 .muted { color: var(--text-muted); }
 
