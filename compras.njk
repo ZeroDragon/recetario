@@ -1,0 +1,16 @@
+---
+layout: base.njk
+title: Lista de compras
+---
+<h1>Lista de compras</h1>
+
+<div id="compras-app">
+  <p id="compras-info" class="subtitle"></p>
+  <button id="reset-lista" type="button" hidden>Desmarcar todo</button>
+  <div id="compras-contenido"></div>
+</div>
+
+<script>
+  window.RECETAS = {{ recetas | dump | safe }};
+</script>
+<script src="{{ '/js/compras.js' | url }}"></script>

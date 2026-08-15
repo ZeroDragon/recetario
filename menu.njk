@@ -1,0 +1,48 @@
+---
+layout: base.njk
+title: Menú semanal
+---
+<h1>Menú semanal</h1>
+
+<div id="menu-app">
+  <!-- Selector de menú -->
+  <div class="menu-toolbar">
+    <label for="menu-select">Menú:</label>
+    <select id="menu-select"></select>
+    <button id="btn-nuevo" type="button">+ Nuevo</button>
+    <button id="btn-eliminar" type="button" disabled>Eliminar</button>
+  </div>
+
+  <!-- Editor de menú (tabla editable) -->
+  <section id="menu-editor" hidden>
+    <h2 id="editor-titulo">Nuevo menú</h2>
+    <input type="text" id="menu-nombre" placeholder="Nombre del menú (ej. Semana 1)">
+    <table id="menu-tabla">
+      <thead>
+        <tr>
+          <th>Día</th>
+          <th>Desayuno</th>
+          <th>Post-entreno</th>
+          <th>Comida</th>
+          <th>Cena</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <div class="menu-actions">
+      <button id="btn-guardar" type="button">Guardar</button>
+      <button id="btn-cancelar" type="button">Cancelar</button>
+    </div>
+  </section>
+
+  <!-- Render del menú seleccionado -->
+  <section id="menu-render">
+    <h2 id="render-titulo"></h2>
+    <div id="render-contenido"></div>
+  </section>
+</div>
+
+<script>
+  window.RECETAS = {{ recetas | dump | safe }};
+</script>
+<script src="{{ '/js/menu.js' | url }}"></script>

@@ -7,14 +7,18 @@ Recetario estático personal: recetas en **HTML crudo** + menú semanal y lista 
 ```
 recetario/
 ├── recipes/                 # recetas en HTML crudo (una por archivo)
-│   └── nombre.html          # front matter + contenido HTML
+│   └── nombre.html          # front matter (title, tipo, ingredientes) + contenido HTML
 ├── _includes/
-│   ├── base.njk             # shell de la página (header, nav, footer)
+│   ├── base.njk             # shell de la página (header, nav, footer, ribbon)
 │   └── receta.njk           # layout de receta
-├── css/style.css            # tema oscuro (basado en Monospace IDX Dark)
-├── menu.md                  # menú semanal (Markdown)
-├── compras.md               # lista de compras (Markdown, checkboxes)
-├── eleventy.config.js       # config de 11ty (pathPrefix aquí)
+├── _data/recetas.js         # global data: expone recetas (slug, título, tipo, ingredientes)
+├── css/style.css            # tema oscuro (Monospace IDX Dark), mobile-first
+├── js/
+│   ├── menu.js              # CRUD de menús (localStorage)
+│   └── compras.js           # lista de compras generada desde el menú activo
+├── menu.njk                 # página Menú (interactiva)
+├── compras.njk              # página Lista de compras (generada al vuelo)
+├── eleventy.config.js       # config de 11ty (pathPrefix, markdown, passthroughs)
 ├── .github/workflows/pages.yml  # build + deploy a GitHub Pages
 └── _site/                   # build generado (no se commitea)
 ```
@@ -72,38 +76,36 @@ Cada receta es un archivo HTML en `recipes/`:
 layout: receta.njk
 title: Nombre de la receta
 tags: receta
+tipo: desayuno | postentreno | comida | cena
+ingredientes:
+  - 'Cantidad ingrediente 1'
+  - 'Cantidad ingrediente 2'
 ---
 <h1>Nombre de la receta</h1>
 <p>Contenido en HTML crudo: h1, p, ul, ol, img, table…</p>
 ```
 
-- El front matter (entre `---`) es YAML: `title` es obligatorio (se usa en el índice).
+- El front matter (entre `---`) es YAML:
+  - `title`: obligatorio (se usa en el índice)
+  - `tipo`: **lo pones tú** — `desayuno`, `postentreno`, `comida` o `cena` (se usa en el CRUD de menús para filtrar qué recetas aparecen en cada comida)
+  - `ingredientes`: lista de strings (se usan para generar la lista de compras al vuelo)
 - El contenido es HTML puro — no se procesa Markdown.
 - El build agrega la receta al índice automáticamente.
 
-## Editar el menú y la lista de compras
+## Menú y lista de compras (interactivos)
 
-**`menu.md`** — tablas por día:
+- **Menú** (`/menu/`): CRUD de menús con **localStorage** (sin DB). Crea, edita y elimina menús semanales; cada menú tiene los 7 días × 4 comidas (desayuno, post-entreno, comida, cena) con un select por celda. Al guardar se selecciona y renderiza; **los renglones vacíos no se muestran** (ej. sin post-entreno en fin de semana).
+- **Lista de compras** (`/compras/`): se **genera automáticamente** desde el menú activo — une los `ingredientes` de todas las recetas seleccionadas. Checkboxes interactivos (clic en el renglón) + botón "Desmarcar todo". No hay persistencia del marcado.
+- El menú inicial se siembra automáticamente (el plan semanal por defecto) la primera vez.
+- Datos en localStorage:
+  - `recetario.menus` → array de menús `{ id, nombre, dias }`
+  - `recetario.menuActivo` → id del menú seleccionado
 
-```markdown
-## Lunes
+## Editar el menú (antes era markdown)
 
-| Comida | Receta |
-| --- | --- |
-| Desayuno | [Avena]({{ '/recipes/avena-con-yogurt/' | url }}) |
-| Comida | [Tinga de pollo]({{ '/recipes/tinga-de-pollo/' | url }}) |
-```
-
-**`compras.md`** — checkboxes agrupados por categoría:
-
-```markdown
-## Proteínas
-
-- [ ] Pechuga de pollo (1 kg)
-- [x] Huevos (1 docena)   <!-- marcado = tachado en el sitio -->
-```
+Ya no se edita `menu.md` (eliminado): el menú se gestiona desde la interfaz en `/menu/`.
 
 ## Notas
 
-- Los links internos usan el filtro `| url` de Nunjucks para respetar el `pathPrefix` — úsalo siempre en `menu.md`/`compras.md`.
+- Los links internos usan el filtro `| url` de Nunjucks para respetar el `pathPrefix` — úsalo siempre en plantillas.
 - El tema oscuro está basado en [Monospace IDX Dark](https://github.com/amnweb/monospace-idx-theme); la paleta vive en las variables `:root` de `css/style.css`.

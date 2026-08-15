@@ -401,7 +401,131 @@ main table {
   }
 }
 
-/* ---------- hover solo en dispositivos con puntero ---------- */
+/* ---------- CRUD de menús ---------- */
+
+.menu-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
+.menu-toolbar label { color: var(--text-muted); font-size: 0.95rem; }
+
+.menu-toolbar select,
+.menu-toolbar button,
+.menu-actions button,
+#menu-nombre {
+  font-family: inherit;
+  font-size: 0.95rem;
+  padding: 0.55rem 0.9rem;
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.menu-toolbar select:hover,
+.menu-toolbar button:hover,
+.menu-actions button:hover { border-color: var(--accent); }
+
+.menu-toolbar button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+#menu-nombre {
+  width: 100%;
+  max-width: 20rem;
+  margin-bottom: 1rem;
+}
+
+#menu-tabla {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+#menu-tabla th, #menu-tabla td {
+  border: 1px solid var(--border);
+  padding: 0.5rem 0.6rem;
+  text-align: left;
+  vertical-align: middle;
+}
+
+#menu-tabla th { background: var(--surface-2); }
+
+#menu-tabla .dia-label { font-weight: 600; white-space: nowrap; }
+
+.receta-select {
+  width: 100%;
+  max-width: 14rem;
+  font-family: inherit;
+  font-size: 0.9rem;
+  padding: 0.4rem 0.5rem;
+  border-radius: 6px;
+  background: var(--bg-deep);
+  color: var(--text);
+  border: 1px solid var(--border);
+  cursor: pointer;
+}
+
+.menu-actions {
+  display: flex;
+  gap: 0.6rem;
+  margin-bottom: 2rem;
+}
+
+#btn-guardar { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
+#btn-guardar:hover { filter: brightness(1.1); }
+
+/* Render del menú */
+.menu-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.menu-dia {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+}
+
+.menu-dia h3 {
+  margin: 0 0 0.6rem;
+  font-size: 1.05rem;
+  color: var(--accent-strong);
+}
+
+.menu-dia ul { list-style: none; margin: 0; padding: 0; }
+.menu-dia li { padding: 0.25rem 0; }
+
+.comida-label {
+  display: inline-block;
+  min-width: 6.5rem;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.menu-dia a { color: var(--accent); }
+.menu-dia a:hover { color: var(--accent-strong); }
+
+.muted { color: var(--text-muted); }
+
+/* Compras generadas */
+#compras-info { margin-bottom: 1rem; }
+
+/* Responsive: tabla de edición con scroll horizontal en móvil */
+@media (min-width: 700px) {
+  .menu-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 900px) {
+  .menu-grid { grid-template-columns: repeat(3, 1fr); }
+}
 /* (evita estados "pegados" al tocar en iPhone) */
 
 @media (hover: hover) and (pointer: fine) {
