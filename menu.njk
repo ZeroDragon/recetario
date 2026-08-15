@@ -19,6 +19,22 @@ title: Menú semanal
   <section id="menu-editor" hidden>
     <h2 id="editor-titulo">Nuevo menú</h2>
     <input type="text" id="menu-nombre" placeholder="Nombre del menú (ej. Semana 1)">
+
+    <fieldset class="generador">
+      <legend>Objetivo diario</legend>
+      <label for="kcal-min">kCal mín</label>
+      <input type="number" id="kcal-min" min="0" step="50" placeholder="1800">
+      <label for="kcal-max">kCal máx</label>
+      <input type="number" id="kcal-max" min="0" step="50" placeholder="2200">
+      <select id="regimen-select">
+        <option value="">— Régimen —</option>
+        <option value="mantenimiento">Equilibrio general (Mantenimiento) · 30% P · 30% G · 40% C</option>
+        <option value="definicion">Definición / Pérdida de grasa · 35% P · 25% G · 40% C</option>
+        <option value="volumen">Aumento muscular (Volumen) · 25% P · 25% G · 50% C</option>
+      </select>
+      <button id="btn-auto" type="button">✨ Auto generar</button>
+    </fieldset>
+
     <table id="menu-tabla">
       <thead>
         <tr>
@@ -27,6 +43,7 @@ title: Menú semanal
           <th>Post-entreno</th>
           <th>Comida</th>
           <th>Cena</th>
+          <th>Totales/día</th>
         </tr>
       </thead>
       <tbody></tbody>

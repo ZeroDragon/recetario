@@ -520,6 +520,97 @@ main table {
   margin-bottom: 1rem;
 }
 
+/* Objetivo diario del generador */
+.generador {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.9rem 1rem;
+  margin: 0 0 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.generador legend {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--accent-strong);
+  padding: 0 0.4rem;
+}
+
+.generador label {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.generador input[type="number"] {
+  width: 6.5rem;
+  font-family: inherit;
+  font-size: 0.95rem;
+  padding: 0.55rem 0.7rem;
+  border-radius: 8px;
+  background: var(--bg-deep);
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+}
+
+.generador select {
+  font-family: inherit;
+  font-size: 0.95rem;
+  padding: 0.55rem 0.7rem;
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+  cursor: pointer;
+}
+
+#btn-auto {
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding: 0.55rem 1rem;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  border: 1px solid var(--accent);
+  cursor: pointer;
+  transition: filter 0.15s ease;
+}
+
+#btn-auto:hover { filter: brightness(1.1); }
+
+/* Totales del día en el editor */
+.totales-dia {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.totales-dia.dentro-rango {
+  color: var(--green);
+  font-weight: 600;
+}
+
+.totales-dia.fuera-rango {
+  color: var(--red);
+  font-weight: 600;
+}
+
+/* Totales del día en el render del menú */
+.totales-dia-render {
+  border-top: 1px dashed var(--border);
+  margin-top: 0.4rem;
+  padding-top: 0.45rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.objetivo-ok { color: var(--green); font-weight: 600; }
+.objetivo-no { color: var(--red); font-weight: 600; }
+
 #menu-tabla {
   width: 100%;
   border-collapse: collapse;
