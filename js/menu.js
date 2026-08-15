@@ -88,7 +88,8 @@ function recetaPorSlug(slug) {
 }
 
 function recetasPorTipo(tipo) {
-  return RECETAS.filter((r) => r.tipo === tipo);
+  // tipo en el front matter puede ser array (["comida","cena"]) o string ("comida")
+  return RECETAS.filter((r) => Array.isArray(r.tipo) ? r.tipo.includes(tipo) : r.tipo === tipo);
 }
 
 // ---- Estado de la UI ----

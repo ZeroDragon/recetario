@@ -17,10 +17,14 @@ export default () => {
       const raw = fs.readFileSync(path.join(recipesDir, fname), "utf8");
       const { data } = matter(raw);
       const slug = fname.replace(/\.html$/, "");
+      // tipo puede ser string ("comida") o array (["comida", "cena"]): normalizar a array
+      let tipo = data.tipo;
+      if (!tipo) tipo = [];
+      else if (typeof tipo === "string") tipo = tipo.split(",").map((s) => s.trim()).filter(Boolean);
       recipes.push({
         slug,
         title: data.title || slug,
-        tipo: data.tipo || "",
+        tipo,
         ingredientes: data.ingredientes || [],
       });
     }
