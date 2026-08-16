@@ -450,6 +450,7 @@ function renderMenu() {
 
   titulo.textContent = menu.nombre;
   const restricciones = Array.isArray(menu.restricciones) ? menu.restricciones : [];
+  const planCocinar = cargarCocinar();
   let html = '<div class="menu-grid">';
 
   DIAS.forEach((dia) => {
@@ -465,7 +466,17 @@ function renderMenu() {
       const aviso = hits.length
         ? ` <span class="aviso-conflicto" title="Contiene: ${hits.join(", ")}">⚠ ${hits.join(", ")}</span>`
         : "";
-      html += `<li><span class="comida-label">${c.label}:</span> <a href="/recetario/recipes/${slug}/">${nombre}</a>${aviso}</li>`;
+      const enPlan = planCocinar.find((i) => i.slug === slug);
+      const porciones = (receta && receta.porciones_receta) || 1;
+      const aporteDia = (enPlan && enPlan.aportes && enPlan.aportes[dia.key]) || 0;
+      html += `<li><span class="comida-label">${c.label}:</span>`;
+      html += ` <a class="comida-nombre" href="/recetario/recipes/${slug}/">${nombre}</a>${aviso}`;
+      html += ` <span class="menu-cocinar-acciones">`;
+      html += `  <button type="button" class="btn-cocinar" data-slug="${slug}" data-dia="${dia.key}" data-porciones="${porciones}" aria-label="Agregar ${nombre} al plan de cocinar">Cocinar</button>`;
+      html += `  <button type="button" class="btn-cocinar-remover" data-slug="${slug}" data-dia="${dia.key}" data-porciones="${porciones}" aria-label="Quitar ${nombre} del plan de cocinar"${aporteDia > 0 ? "" : " disabled"}>Remover</button>`;
+      html += `  <span class="cocinar-dia" data-slug="${slug}" data-dia="${dia.key}"${aporteDia > 0 ? "" : " hidden"}>${aporteDia > 0 ? `✓ +${aporteDia} hoy` : ""}</span>`;
+      html += `  <span class="cocinar-cantidad" data-slug="${slug}"${enPlan ? "" : " hidden"}>${enPlan ? enPlan.raciones : ""} en plan</span>`;
+      html += ` </span></li>`;
     });
 
     // Totales del día (kcal + macros) + verificación contra el objetivo
@@ -857,6 +868,95 @@ $("#menu-select").addEventListener("change", (e) => {
     $(selBtn).disabled = !tieneActivo;
   });
   renderMenu();
+});
+
+// ---- Plan de cocinar (comparte localStorage con la sección Cocinar) ----
+// recetario.cocinar -> [{ slug, raciones, aportes: { lun: 2, vie: 2 } }]
+//   raciones = total de raciones en el plan (lo que consume la sección Cocinar)
+//   aportes  = cuántas raciones aportó CADA día del menú (para el indicador
+//              por día). Items viejos sin aportes se migran a {}.
+
+function cargarCocinar() {
+  try {
+    const p = JSON.parse(localStorage.getItem("recetario.cocinar"));
+    if (Array.isArray(p)) {
+      return p.map((i) => ({ ...i, aportes: i.aportes || {} }));
+    }
+  } catch {
+    // ignore
+  }
+  return [];
+}
+
+function guardarCocinar(items) {
+  localStorage.setItem("recetario.cocinar", JSON.stringify(items));
+}
+
+// Actualiza badge total ("N en plan") e indicador por día tras un cambio.
+// Un mismo platillo puede aparecer en varios días: se actualizan TODAS sus
+// apariciones (querySelectorAll), no solo la primera.
+function refrescarBadgeCocinar(slug) {
+  const items = cargarCocinar();
+  const item = items.find((i) => i.slug === slug);
+  const total = item ? item.raciones : 0;
+
+  document.querySelectorAll(`.btn-cocinar-remover[data-slug="${slug}"]`).forEach((remover) => {
+    const li = remover.closest("li");
+    if (!li) return;
+    const dia = remover.dataset.dia;
+    const aporte = (item && item.aportes && item.aportes[dia]) || 0;
+
+    const cantidad = li.querySelector(".cocinar-cantidad");
+    if (cantidad) {
+      cantidad.hidden = !item;
+      cantidad.textContent = item ? `${total} en plan` : "";
+    }
+    const indicador = li.querySelector(".cocinar-dia");
+    if (indicador) {
+      indicador.hidden = !(aporte > 0);
+      indicador.textContent = aporte > 0 ? `✓ +${aporte} hoy` : "";
+    }
+    // Remover solo tiene sentido en el día que aportó raciones.
+    remover.disabled = !(aporte > 0);
+  });
+}
+
+// Delegación: botones Cocinar / Remover dentro del render del menú.
+$("#render-contenido").addEventListener("click", (e) => {
+  const btn = e.target.closest(".btn-cocinar, .btn-cocinar-remover");
+  if (!btn) return;
+  const slug = btn.dataset.slug;
+  const dia = btn.dataset.dia;
+  const porciones = parseInt(btn.dataset.porciones, 10) || 1;
+  const items = cargarCocinar();
+  const idx = items.findIndex((i) => i.slug === slug);
+
+  if (btn.classList.contains("btn-cocinar")) {
+    // Sumar las porciones de la receta (default) al plan, anotando el día.
+    if (idx >= 0) {
+      const item = items[idx];
+      item.aportes = item.aportes || {};
+      item.aportes[dia] = (item.aportes[dia] || 0) + porciones;
+      item.raciones += porciones;
+    } else {
+      items.push({ slug, raciones: porciones, aportes: { [dia]: porciones } });
+    }
+  } else {
+    // Restar del día específico; si el día llega a 0 se limpia, y si el total
+    // llega a 0 o menos, la receta se elimina del plan.
+    if (idx < 0) return;
+    const item = items[idx];
+    item.aportes = item.aportes || {};
+    const aporteDia = item.aportes[dia] || 0;
+    if (aporteDia <= 0) return; // este día no aportó: nada que quitar
+    item.aportes[dia] = aporteDia - porciones;
+    if (item.aportes[dia] <= 0) delete item.aportes[dia];
+    item.raciones -= porciones;
+    if (item.raciones <= 0) items.splice(idx, 1);
+  }
+
+  guardarCocinar(items);
+  refrescarBadgeCocinar(slug);
 });
 
 init();

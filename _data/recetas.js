@@ -26,6 +26,7 @@ export default () => {
         title: data.title || slug,
         tipo,
         ingredientes: data.ingredientes || [],
+        porciones_receta: data.porciones_receta || 1,
         macros_por_porcion: data.macros_por_porcion || null,
       });
     }

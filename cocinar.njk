@@ -1,0 +1,30 @@
+---
+layout: base.njk
+title: Cocinar
+---
+<h1>Cocinar</h1>
+<p class="subtitle">Arma tu plan de cocina: agrega recetas, ajusta las raciones y prepara todo de una sola vez.</p>
+
+<div class="cocinar-toolbar">
+  <label for="receta-input">Agregar receta:</label>
+  <div class="typeahead" id="typeahead-receta">
+    <input type="text" id="receta-input" placeholder="Buscar receta…" autocomplete="off" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="receta-sugerencias">
+    <div id="receta-sugerencias" class="typeahead-menu" role="listbox" hidden></div>
+  </div>
+  <button id="btn-agregar" type="button">+ Agregar</button>
+  <button id="btn-vaciar" type="button" disabled>Vaciar plan</button>
+</div>
+
+<p id="plan-resumen" class="plan-resumen" hidden></p>
+
+<div id="plan-vacio" class="plan-vacio">
+  <p>El plan está vacío. Agrega las recetas que vas a preparar.</p>
+</div>
+
+<div id="plan" class="plan-lista"></div>
+
+<script>
+  window.RECETAS = {{ recetas | dump | safe }};
+  window.FLUJOS = {{ flujos | dump | safe }};
+</script>
+<script src="{{ '/js/cocinar.js' | url }}"></script>
