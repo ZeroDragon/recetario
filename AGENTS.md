@@ -56,6 +56,15 @@ macros_por_porcion:
 - `porciones_receta` es el rendimiento total de las cantidades indicadas.
 - Los cinco valores de `macros_por_porcion` son números por una sola porción, no por la receta completa. Usa valores enteros coherentes con ingredientes y rendimiento; no inventes precisión ni copies macros de otra receta. Si no hay datos suficientes para estimarlos con fundamento, pide esos datos antes de finalizar la receta.
 
+### Ingredientes opcionales y macros
+
+- Cuando un ingrediente sea opcional, identifícalo tanto en el front matter como en el flujo. En `ingredientes`, agrega `(opcional)` al final del nombre, por ejemplo: `'15 g chispas de chocolate semiamargo (opcional)'`. En el flujo, agrega `(opcional)` a la cantidad: `15 g (opcional)`.
+- Calcula `macros_por_porcion` usando únicamente los ingredientes obligatorios. No incluyas ningún ingrediente opcional en esos cinco valores, aunque aparezca en `ingredientes` y en el flujo.
+- Muestra junto a cada ingrediente opcional cuánto agrega por sí solo a la receta completa. Este incremento corresponde a toda la cantidad indicada y a todas las porciones de la receta; no lo dividas entre `porciones_receta`.
+- Usa esta notación compacta y este orden para el incremento: `+(CALORÍAS kcal · P PROTEÍNA · C CARBOHIDRATOS · G GRASAS · F FIBRA)`. `P`, `C`, `G` y `F` expresan gramos.
+- En el nombre del ingrediente dentro del flujo, coloca exactamente ` ¶ ` antes del incremento de macros. El marcador genera un salto de línea para presentar los macros debajo del nombre. Ejemplo completo: `15 g (opcional) | chispas de chocolate semiamargo ¶ +(76 kcal · P 0.6 · C 9.6 · G 4.2 · F 1) | [incorporar]`.
+- Calcula el incremento de cada opcional de manera independiente, sin sumar otros opcionales. Si se usan varios, sus incrementos pueden sumarse al total base de la receta.
+
 ## Cuerpo con el shortcode `flujo`
 
 El cuerpo usa el shortcode pareado `flujo` / `endflujo` para describir ingredientes y acciones. No escribas la tabla HTML a mano: el shortcode genera y valida el diagrama de flujo de cuatro columnas durante el build.
